@@ -1,11 +1,11 @@
-import Router from "./shared/router";
+import Router from "./shared/Router";
 
 function App() {
   return (
     <div>
-      <Router/>
+      <Router />
     </div>
-    );
+  );
 }
 
 export default App;
