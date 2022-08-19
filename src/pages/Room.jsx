@@ -1,5 +1,7 @@
+import ChatRoom from "../components/rooms/ChatRoom";
+
 const Room = () => {
-  return <div></div>;
+  return <ChatRoom />;
 };
 
 export default Room;
