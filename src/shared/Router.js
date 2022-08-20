@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-import {Navigate, Route, Routes} from 'react-router-dom'
-
-const Router = () => {
-=======
 import { Navigate, Route, Routes } from "react-router-dom";
 
 //pages
@@ -22,17 +17,5 @@ const Router = () => {
     </Routes>
   );
 };
->>>>>>> Stashed changes
 
-    return(
-        <Routes>
-            <Route path='/' element={<Main/>}/>
-            <Route path='/singup' element={<SignUp/>}/>
-            <Route path='/login' element={<Login/>}/>
-            <Route path='/room/:roomId' element={<Room/>}/>
-            <Route path='/*' element={<Navigate to="/"/>}/>
-        </Routes>
-    )
-}
-
-export default Router
+export default Router;
