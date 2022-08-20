@@ -8,10 +8,9 @@ import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-//socket 연결
-const socket = io.connect(`${serverUrl}/api/chat`, {
-  path: "/socket.io",
-});
+// const socket = io.connect(`${serverUrl}/api/chat`, {
+//   path: "/socket.io",
+// });
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -25,6 +24,16 @@ const ChatRoom = () => {
     roomId,
   });
   const [chats, setChats] = useState([]);
+  const [socket, setSocket] = useState(null);
+
+  //socket 연결하기
+  useEffect(() => {
+    const newSocket = io.connect(`${serverUrl}/api/chat`, {
+      path: "/socket.io",
+    });
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, [setSocket]);
 
   //socket에 메시지 수신 socket.on()
   const ChatRoom = async () => {
@@ -39,7 +48,7 @@ const ChatRoom = () => {
     }
   };
 
-  //socket에 메시지 전송 socket.emit(이름, 내용)
+  //socket에 메시지 전송 socket.emit()
   const onMessageSubmit = async (e) => {
     e.preventDefault();
     if (content.trim() === "") {
@@ -50,7 +59,6 @@ const ChatRoom = () => {
           "chatData"
           // {chatId, nickname, content, updatedAt}
         );
-
         await axios.post(`${serverUrl}/api/chat/${roomId}`, chatData, {
           headers: {},
         });
@@ -62,14 +70,29 @@ const ChatRoom = () => {
     setContent("");
   };
 
-  //채팅방입장시
-  const enterRoom = () => {
-    socket.emit("room:enter");
-  };
+  //user가 채팅방입장시
+  // socket.on("join-room", (roomName, done) => {
+  //   socket.join(roomName);
+  //   done();
+  //   socket
+  //     .to(roomName)
+  //     .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
+  // });
 
-  //user가 채팅방 퇴장시
-  const leaveRoom = () => {
-    socket.emit("room:leave");
+  // //채팅방 입장시
+  // useEffect(() => {
+  //   socket.on("join-msg", (msg) => {
+  //     //alert(msg);
+  //     setContent(msg);
+  //   });
+  // }, [socket]);
+
+  //채팅방 나갈시 확인
+  const onClickHomeBtnHandler = () => {
+    const result = window.confirm("채팅방을 나가시겠습니까?");
+    if (result) {
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -84,14 +107,18 @@ const ChatRoom = () => {
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
-        <h1>#채팅방 이름</h1>
-        <button onClick={() => navigate("/")}>채팅방 나가기</button>
+        <h1>#항해하는 3조 힘힘!!</h1>
+        <button type="button" onClick={() => onClickHomeBtnHandler()}>
+          채팅방 나가기
+        </button>
       </div>
       <p>🟢online 378</p>
       <MessageBox />
-      {chats?.map((chat) => {
-        <MessageBox key={chat.chatId} chat={chat} />;
-      })}
+      {chats
+        ?.sort((a, b) => a.time - b.time)
+        .map((chat) => {
+          <MessageBox key={chat.chatId} chat={chat} />;
+        })}
 
       <TextField
         className="text"

@@ -2,10 +2,12 @@ import styled from "styled-components";
 import io from "socket.io-client";
 import axios from "axios";
 import { serverUrl } from "../../redux/modules";
+import { useState } from "react";
 
 const socket = io.connect("http://localhost:3001");
 
 const MessageBox = ({ chat }) => {
+  const [del, setDel] = useState(false);
   //const { chatId, nickname, content, updatedAt } = chat;
   //const token = localStorage.getItem("token");
 
@@ -18,7 +20,7 @@ const MessageBox = ({ chat }) => {
         await axios.delete(`${serverUrl}/api/chat/${chat.chatId}`, {
           headers: {},
         });
-        return;
+        return setDel(true);
       } catch (err) {
         return console.log(err);
       }
@@ -30,15 +32,24 @@ const MessageBox = ({ chat }) => {
     //key={chatId}
     >
       <div className="name">
-        <p className="nickname">
-          {/* {nickname} */}
-          수수
-        </p>
-        <p className="time">
-          {/* {updatedAt} */}
-          2022.08.20.
-        </p>
-        <button onClick={() => onClickDelBtnHandler()}>✕</button>
+        {del ? (
+          <p> 삭제된 메시지입니다.</p>
+        ) : (
+          <>
+            <ImgBox></ImgBox>
+            <p className="nickname">
+              {/* {nickname} */}
+              수수
+            </p>
+            <p className="time">
+              {/* {updatedAt} */}
+              2022.08.20.
+            </p>
+            <button type="button" onClick={() => onClickDelBtnHandler()}>
+              ✕
+            </button>
+          </>
+        )}
       </div>
       <p className="content">
         채팅성공하자 파이팅!
@@ -58,6 +69,11 @@ const Message = styled.div`
   flex-wrap: wrap;
   flex-flow: column;
   justify-content: flex-start;
+  overflow-y: scroll;
+
+  .wrap {
+    height: 600px;
+  }
 
   .name {
     margin: 10px;
@@ -94,6 +110,8 @@ const Message = styled.div`
 `;
 
 const ImgBox = styled.div`
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-image: url("");
   background-position: center;
