@@ -1,12 +1,12 @@
-import LoginForm from "../components/login/LoginForm";
 import StBackgroundImg from "../components/common/StBackgroundImg"
+import SignUpForm from "../components/signup/SignUpForm";
 
-const Login = () => {
+const SingUp = () => {
   return (
     <StBackgroundImg>
-      <LoginForm/>
+      <SignUpForm/>
     </StBackgroundImg>
   )
 };
 
-export default Login;
+export default SingUp;
