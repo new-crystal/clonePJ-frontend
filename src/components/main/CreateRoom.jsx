@@ -56,12 +56,12 @@ const CreateRoom = ({ setAddRoom }) => {
           >
             <MenuItem value="game">게임</MenuItem>
             <MenuItem value="community">커뮤니티</MenuItem>
-            <MenuItem value="anime-manga">애니/만화</MenuItem>
+            <MenuItem value="animation">애니/만화</MenuItem>
             <MenuItem value="music">음악</MenuItem>
-            <MenuItem value="technology">기술</MenuItem>
+            <MenuItem value="tech">기술</MenuItem>
             <MenuItem value="language">언어</MenuItem>
-            <MenuItem value="movies">영화</MenuItem>
-            <MenuItem value="other">기타</MenuItem>
+            <MenuItem value="movie">영화</MenuItem>
+            <MenuItem value="etc">기타</MenuItem>
           </Select>
         </FormControl>
       </Box>
