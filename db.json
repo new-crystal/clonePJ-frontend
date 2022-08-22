@@ -8,13 +8,20 @@
       "id": 1
     }
   ],
-  "user": [
+  "users": [
     {
       "email": "test@test.com",
       "nickname": "일여덟개",
       "password": "11111111",
       "birth": "1995-01-14",
       "id": 1
+    },
+    {
+      "email": "test3@test.com",
+      "password": "$2a$10$ekYmqvGmTJTQfhs8vihGvuBoDrxt1UbGyDqC/98x2sDiyHS9Ld0MC",
+      "nickname": "일여덟개",
+      "birth": "1995-01-14",
+      "id": 2
     }
   ],
   "login": [
@@ -27,6 +34,18 @@
       "email": "test@test.com",
       "password": "11111111",
       "id": 3
+    }
+  ],
+  "room":[
+    {
+      "roomId": 1,
+      "roomName": "채팅하자",
+      "categroy": ""
+    },
+    {
+      "roomId": 2,
+      "roomName": "채팅두번하자",
+      "categroy": ""
     }
   ]
 }
