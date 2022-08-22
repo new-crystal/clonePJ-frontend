@@ -15,12 +15,6 @@ const CreateRoom = ({ setAddRoom }) => {
   // const socket = io.connect(`${serverUrl}/api/chat`, {
   //   path: "/socket.io",
   // });
-<<<<<<< HEAD
-=======
-
-  const socket = 1
->>>>>>> d7c0fcd318551af6a516656fdff71d5d3d599c98
-
   const onChangeRoomNameHandler = (e) => {
     setRoomName(e.target.value);
   };
