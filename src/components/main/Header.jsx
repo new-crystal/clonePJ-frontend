@@ -1,23 +1,33 @@
 import styled from "styled-components";
 import headerImg from "../../src_assets/headerImg.JPG";
 import loginBtnImg from "../../src_assets/loginBtnImg.png";
+import bot222 from "../../src_assets/bot222.png"
 
 import { useNavigate } from "react-router";
-import Category from "./Category";
 
-const Header = () => {
+const Header = (props) => {
   const navigate = useNavigate();
 
+
+  const user = "123"
+
   return (
-    <StHeader>
-      <StNavContainer>
-        <StNavUl>
-          <StHeaderLeft onClick={() => navigate("/")} />
-          <StHeaderRight onClick={() => navigate("/login")} />
-        </StNavUl>
-        <Category />
-      </StNavContainer>
-    </StHeader>
+    <>
+      <StHeader>
+        <StNavContainer>
+          <StNavUl>
+            <StHeaderLeft onClick={() => navigate("/")} />
+            { {user} == null ? 
+              <StHeaderRight onClick={() => navigate("/login")} /> :
+              <StHeaderRightUser>
+                <p>닉네임</p>
+              </StHeaderRightUser>
+            }
+          </StNavUl>
+        </StNavContainer>
+      </StHeader>
+      <StDropdown/>
+    </>
   );
 };
 
@@ -50,6 +60,7 @@ const StHeaderLeft = styled.li`
   border-radius: 0 0 10px 10px;
   cursor: pointer;
 `;
+
 const StHeaderRight = styled.li`
   width: 140px;
   height: 45px;
@@ -58,3 +69,31 @@ const StHeaderRight = styled.li`
   border-radius: 0 0 10px 10px;
   cursor: pointer;
 `;
+
+const StHeaderRightUser = styled.li`
+  width: 140px;
+  height: 45px;
+  background-image: url(${bot222});
+  background-size: contain;
+  border-radius: 0 0 10px 10px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  & p{
+    color: white;
+    display: flex;
+    font-weight: 700;
+    padding-left: 10px;
+    position: relative;
+  }
+`;
+
+const StDropdown = styled.div`
+  background-color: green;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  display: block;
+`

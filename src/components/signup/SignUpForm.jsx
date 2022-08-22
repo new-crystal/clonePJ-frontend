@@ -23,10 +23,10 @@ const SignUpForm = () => {
     })
     .catch (error=>{
       console.log(error) // 나중에 지우기
-      Swal.fire(
-        '이미 가입한 이메일입니다',
-        'error'
-      )
+      Swal.fire({
+        icon: 'error',
+        title: '이미 가입한 이메일입니다'
+      })
     })
   };
 
