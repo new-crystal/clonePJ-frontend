@@ -1,9 +1,21 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { serverUrl } from "../../redux/modules";
 import CreateRoom from "./CreateRoom";
 
 const Category = () => {
   const [addRoom, setAddRoom] = useState(false);
+  const [chatRoom, setChatRoom] = useState("");
+
+  const getChatRoom = async () => {
+    const res = await axios.get(`${serverUrl}/api/room`);
+    setChatRoom(res);
+  };
+
+  useEffect(() => {
+    getChatRoom();
+  }, []);
 
   return (
     <>
@@ -18,6 +30,7 @@ const Category = () => {
         <CategoryBtn>영화</CategoryBtn>
         <CategoryBtn>기타</CategoryBtn>
       </CategoryWrap>
+      <button>최근갱신</button>
       <button onClick={() => setAddRoom(!addRoom)}>서버생성하기</button>
       {addRoom ? <CreateRoom setAddRoom={setAddRoom} /> : null}
     </>
@@ -29,6 +42,10 @@ const CategoryWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  h1 {
+    color: white;
+  }
 `;
 
 const CategoryBtn = styled.button`
