@@ -1,9 +1,9 @@
+
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "../../shared/axios"
 
 import discordLogo from "../../src_assets/discordLogo.png"
-
 
 const RoomList = () => {
 
@@ -13,22 +13,12 @@ const RoomList = () => {
   const getRoomList = async () => {
     // const data = await axios.get(`/room?category=${category}`)
     const data = await axios.get('/room?category=')
-    
   }
 
   useEffect(()=>{getRoomList()}, [])
 
+return (
 
-<<<<<<< Updated upstream
-const Category = () => {
-  const [addRoom, setAddRoom] = useState(false);
-=======
-
->>>>>>> Stashed changes
-  return (
-    <> 
-      <StCategoryWrap>
-        <h1>카테고리: </h1>
         <StCategoryBtn>게임</StCategoryBtn>
         <StCategoryBtn>커뮤니티</StCategoryBtn>
         <StCategoryBtn>애니/만화</StCategoryBtn>
@@ -68,6 +58,7 @@ const StCategoryWrap = styled.form`
   align-items: center;
   justify-content: center;
   & h1{
+
     color: white;
   }
 `;

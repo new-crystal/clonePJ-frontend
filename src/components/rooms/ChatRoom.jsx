@@ -22,6 +22,7 @@ const ChatRoom = () => {
     roomId,
     chatOwner: true,
   });
+  const [roomData, setRoomData] = useState();
   const [chats, setChats] = useState([]);
 
   //socket 연결
@@ -30,27 +31,20 @@ const ChatRoom = () => {
   // });
 
   //socket에 메시지 수신 socket.on()
-  // const chatRoom = async () => {
-  //   socket.on(
-  //     "ChatData",
-  //     ({ chatId, nickname, content, updatedAt, chatOwner }) => {
-  //       setChats([
-  //         ...chats,
-  //         { chatId, nickname, content, updatedAt, chatOwner },
-  //       ]);
-  //     }
-  //   );
-  //   try {
-  //     await axios.get(`${serverUrl}/api/chat/${roomId}`);
-  //     return;
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
+  const chatRoom = () => {
+    socket.on(
+      "ChatData",
+      ({ chatId, nickname, content, updatedAt, chatOwner }) => {
+        const response = axios.get(`${serverUrl}/api/chat/${roomId}`);
+        setChats(response.result.chatData);
+        setRoomData(response.result.roomData);
+      }
+    );
+  };
 
   useEffect(() => {
     chatRoom();
-  }, [chats]);
+  }, []);
 
   //socket에 메시지 전송 socket.emit()
   const onMessageSubmit = async (e) => {

@@ -6,11 +6,14 @@ import discordLogo from "../../src_assets/discordLogo.png";
 
 const MessageBox = ({ chat, socket }) => {
   const [del, setDel] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [editContent, setEditContent] = useState("");
   //const { chatId, nickname, content, updatedAt, chatOwner } = chat;
   //const token = localStorage.getItem("token");
   //const payload = decodeToken(token);
 
   const chatOwner = true;
+  const chatId = 1;
 
   //메시지 삭제시
   const onClickDelBtnHandler = async () => {
@@ -28,39 +31,88 @@ const MessageBox = ({ chat, socket }) => {
     }
   };
 
+  //메시지 수정시
+  const onChangeEditInput = (e) => {
+    setEditContent(e.target.value);
+  };
+
+  const onEditChatHandler = async () => {
+    socket.emit("chatData", { content: editContent });
+    try {
+      await axios.put(`${serverUrl}/api/chat/${chatId}`, {
+        content: editContent,
+      });
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
     <Message
     //key={chatId}
     >
-      <div className="name">
-        {del ? (
-          <p> 삭제된 메시지입니다.</p>
-        ) : (
-          <>
-            <ImgBox></ImgBox>
-            {/* {payload.nickname === nickname ? null : ( */}
-            <p className="nickname">
-              {/* {nickname} */}
-              수수
+      {edit ? (
+        <EditBox>
+          <Edit
+            type="text"
+            onChange={(e) => onChangeEditInput(e)}
+            placeholder="수정할 채팅을 입력해주세요"
+          />
+          <button
+            onClick={() => {
+              setEdit(false);
+            }}
+          >
+            취소
+          </button>
+          <button onClick={() => onEditChatHandler()}>저장</button>
+        </EditBox>
+      ) : (
+        <>
+          <div className="name">
+            <>
+              <ImgBox></ImgBox>
+              {/* {payload.nickname === nickname ? null : ( */}
+              <p className="nickname">
+                {/* {nickname} */}
+                수수
+              </p>
+              {/* )} */}
+              <p className="time">
+                {/* {updatedAt} */}
+                2022.08.20.
+              </p>
+              {chatOwner ? (
+                <>
+                  <button
+                    className="del"
+                    type="button"
+                    onClick={() => onClickDelBtnHandler()}
+                  >
+                    ✕
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEdit(true);
+                    }}
+                  >
+                    ✎
+                  </button>
+                </>
+              ) : null}
+            </>
+          </div>
+          {del ? (
+            <p> 삭제된 채팅입니다.</p>
+          ) : (
+            <p className="content">
+              채팅성공하자 파이팅!
+              {/* {content} */}
             </p>
-            {/* )} */}
-
-            <p className="time">
-              {/* {updatedAt} */}
-              2022.08.20.
-            </p>
-            {chatOwner ? (
-              <button type="button" onClick={() => onClickDelBtnHandler()}>
-                ✕
-              </button>
-            ) : null}
-          </>
-        )}
-      </div>
-      <p className="content">
-        채팅성공하자 파이팅!
-        {/* {content} */}
-      </p>
+          )}
+        </>
+      )}
     </Message>
   );
 };
@@ -81,7 +133,7 @@ const Message = styled.div`
     justify-content: flex-start;
   }
 
-  & button {
+  .del {
     color: white;
     background-color: #495057;
     border: 0px;
@@ -117,5 +169,16 @@ const ImgBox = styled.div`
   background-position: center;
   background-size: cover;
   margin-right: 10px;
+`;
+
+const EditBox = styled.div`
+  display: block;
+  width: 400px;
+`;
+
+const Edit = styled.input`
+  width: 200px;
+  height: 30px;
+  margin: 20px;
 `;
 export default MessageBox;
