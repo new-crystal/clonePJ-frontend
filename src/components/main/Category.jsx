@@ -1,24 +1,25 @@
-
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "../../shared/axios"
+import axios from "../../shared/axios";
 
-import discordLogo from "../../src_assets/discordLogo.png"
+import discordLogo from "../../src_assets/discordLogo.png";
 
 const RoomList = () => {
-
   const [rooms, setRooms] = useState();
   const [category, setCategory] = useState();
 
   const getRoomList = async () => {
     // const data = await axios.get(`/room?category=${category}`)
-    const data = await axios.get('/room?category=')
-  }
+    const data = await axios.get("/room?category=");
+  };
 
-  useEffect(()=>{getRoomList()}, [])
+  useEffect(() => {
+    getRoomList();
+  }, []);
 
-return (
-
+  return (
+    <>
+      <StCategoryWrap>
         <StCategoryBtn>게임</StCategoryBtn>
         <StCategoryBtn>커뮤니티</StCategoryBtn>
         <StCategoryBtn>애니/만화</StCategoryBtn>
@@ -32,17 +33,17 @@ return (
       <StRoomList>
         <StRoomCard>
           <StRoomHead>
-            <StRoomHeadImg src={discordLogo}/>
+            <StRoomHeadImg src={discordLogo} />
           </StRoomHead>
         </StRoomCard>
         <StRoomCard>
           <StRoomHead>
-            <StRoomHeadImg src={discordLogo}/>
+            <StRoomHeadImg src={discordLogo} />
           </StRoomHead>
         </StRoomCard>
-         <StRoomCard>
+        <StRoomCard>
           <StRoomHead>
-            <StRoomHeadImg src={discordLogo}/>
+            <StRoomHeadImg src={discordLogo} />
           </StRoomHead>
         </StRoomCard>
       </StRoomList>
@@ -57,8 +58,7 @@ const StCategoryWrap = styled.form`
   display: flex;
   align-items: center;
   justify-content: center;
-  & h1{
-
+  & h1 {
     color: white;
   }
 `;
@@ -77,7 +77,7 @@ const StRoomList = styled.div`
   max-width: 80%;
   min-width: 450px;
   margin: auto;
-`
+`;
 
 const StRoomCard = styled.div`
   background-color: #42414b;
@@ -87,15 +87,15 @@ const StRoomCard = styled.div`
   border-radius: 4px;
   overflow: hidden;
   margin: 30px;
-  `;
+`;
 
 const StRoomHead = styled.div`
   background-color: #2e2c34;
   max-width: 450px;
   height: 80px;
-`
+`;
 
 const StRoomHeadImg = styled.img`
   width: 80px;
-  height: 80px
-`
+  height: 80px;
+`;

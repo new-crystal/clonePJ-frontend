@@ -26,9 +26,9 @@ const ChatRoom = () => {
   const [chats, setChats] = useState([]);
 
   //socket 연결
-  // const socket = io.connect(`${serverUrl}/api/chat`, {
-  //   path: "/socket.io",
-  // });
+  const socket = io.connect(`${serverUrl}/api/chat`, {
+    path: "/socket.io",
+  });
 
   //socket에 메시지 수신 socket.on()
   const chatRoom = () => {

@@ -31,7 +31,7 @@ const MessageBox = ({ chat, socket }) => {
     }
   };
 
-  //메시지 수정시
+  //채팅 수정시
   const onChangeEditInput = (e) => {
     setEditContent(e.target.value);
   };
@@ -42,6 +42,7 @@ const MessageBox = ({ chat, socket }) => {
       await axios.put(`${serverUrl}/api/chat/${chatId}`, {
         content: editContent,
       });
+      return setEdit(false);
     } catch (err) {
       alert(err.message);
     }
@@ -65,7 +66,9 @@ const MessageBox = ({ chat, socket }) => {
           >
             취소
           </button>
-          <button onClick={() => onEditChatHandler()}>저장</button>
+          <button type="button" onClick={() => onEditChatHandler()}>
+            저장
+          </button>
         </EditBox>
       ) : (
         <>
