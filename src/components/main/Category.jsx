@@ -7,7 +7,8 @@ const Category = () => {
 
   return (
     <>
-      <Wrap>
+      <CategoryWrap>
+        <h1>카테고리: </h1>
         <CategoryBtn>게임</CategoryBtn>
         <CategoryBtn>커뮤니티</CategoryBtn>
         <CategoryBtn>애니/만화</CategoryBtn>
@@ -16,15 +17,18 @@ const Category = () => {
         <CategoryBtn>언어</CategoryBtn>
         <CategoryBtn>영화</CategoryBtn>
         <CategoryBtn>기타</CategoryBtn>
-      </Wrap>
+      </CategoryWrap>
       <button onClick={() => setAddRoom(!addRoom)}>서버생성하기</button>
       {addRoom ? <CreateRoom setAddRoom={setAddRoom} /> : null}
     </>
   );
 };
 
-const Wrap = styled.div`
-  margin: 100px auto;
+const CategoryWrap = styled.div`
+  margin: 100px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const CategoryBtn = styled.button`

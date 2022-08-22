@@ -1,20 +1,32 @@
 {
-  "posts": [
+  "signup": [
     {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
+      "email": "test@test.com",
+      "nickname": "일여덟개",
+      "password": "11111111",
+      "birth": "1995-01-14",
+      "id": 1
     }
   ],
-  "comments": [
+  "user": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "email": "test@test.com",
+      "nickname": "일여덟개",
+      "password": "11111111",
+      "birth": "1995-01-14",
+      "id": 1
     }
   ],
-  "profile": {
-    "id":2,
-    "name": "typicode"
-  }
+  "login": [
+    {
+      "email": "test@test.com",
+      "password": "11111111",
+      "id": 1
+    },
+    {
+      "email": "test@test.com",
+      "password": "11111111",
+      "id": 3
+    }
+  ]
 }

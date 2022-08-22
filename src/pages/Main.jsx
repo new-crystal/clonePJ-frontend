@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/main/Header";
+import Category from "../components/main/Category";
 
 import backgroundTop from "../src_assets/backgroundTop.png"
 
@@ -9,6 +10,7 @@ const Main = () => {
     <StContainer>
       <StbackgroundTop/>
       <Header/>
+      <Category/>
     </StContainer>
 
     )
