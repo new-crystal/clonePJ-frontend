@@ -25,28 +25,28 @@ const ChatRoom = () => {
   const [chats, setChats] = useState([]);
 
   //socket 연결
-  const socket = io.connect(`${serverUrl}/api/chat`, {
-    path: "/socket.io",
-  });
+  // const socket = io.connect(`${serverUrl}/api/chat`, {
+  //   path: "/socket.io",
+  // });
 
   //socket에 메시지 수신 socket.on()
-  const chatRoom = async () => {
-    socket.on(
-      "ChatData",
-      ({ chatId, nickname, content, updatedAt, chatOwner }) => {
-        setChats([
-          ...chats,
-          { chatId, nickname, content, updatedAt, chatOwner },
-        ]);
-      }
-    );
-    try {
-      await axios.get(`${serverUrl}/api/chat/${roomId}`);
-      return;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const chatRoom = async () => {
+  //   socket.on(
+  //     "ChatData",
+  //     ({ chatId, nickname, content, updatedAt, chatOwner }) => {
+  //       setChats([
+  //         ...chats,
+  //         { chatId, nickname, content, updatedAt, chatOwner },
+  //       ]);
+  //     }
+  //   );
+  //   try {
+  //     await axios.get(`${serverUrl}/api/chat/${roomId}`);
+  //     return;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   useEffect(() => {
     chatRoom();

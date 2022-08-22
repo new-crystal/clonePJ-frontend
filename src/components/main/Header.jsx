@@ -3,13 +3,21 @@ import headerImg from "../../src_assets/headerImg.JPG";
 import loginBtnImg from "../../src_assets/loginBtnImg.png";
 import bot222 from "../../src_assets/bot222.png"
 
+import CreateRoom from "./CreateRoom";
+
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const Header = (props) => {
   const navigate = useNavigate();
 
+  const [addRoom, setAddRoom] = useState(false);
+
+  const [menu, setMenu] = useState(false);
 
   const user = "123"
+
+  const a = "11"
 
   return (
     <>
@@ -20,13 +28,26 @@ const Header = (props) => {
             { {user} == null ? 
               <StHeaderRight onClick={() => navigate("/login")} /> :
               <StHeaderRightUser>
-                <p>닉네임</p>
+                <div>
+                  <StDropdown>
+                    <p>유저닉네임여덟글</p>
+                    <StSelect onClick={() => setAddRoom(!addRoom)}>
+                      ♪ 방만들기
+                    </StSelect>
+                    <StSelect onClick={() => {}}>
+                      ◌ 회원탈퇴
+                    </StSelect>
+                    <StSelect onClick={() => {}}>
+                      ↩ 로그아웃
+                    </StSelect>
+                  </StDropdown>
+                </div>
               </StHeaderRightUser>
             }
           </StNavUl>
         </StNavContainer>
       </StHeader>
-      <StDropdown/>
+      {addRoom ? <CreateRoom setAddRoom={setAddRoom} /> : null}
     </>
   );
 };
@@ -71,29 +92,55 @@ const StHeaderRight = styled.li`
 `;
 
 const StHeaderRightUser = styled.li`
-  width: 140px;
+  width: 45px;
   height: 45px;
   background-image: url(${bot222});
   background-size: contain;
   border-radius: 0 0 10px 10px;
   background-repeat: no-repeat;
   cursor: pointer;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  & p{
+  & > div{
+    display: none;
+  }
+  :hover > div{
+    width: 100%;
+    height: 100%;
     color: white;
-    display: flex;
     font-weight: 700;
     padding-left: 10px;
     position: relative;
+    display: block;
   }
-`;
+  `;
 
 const StDropdown = styled.div`
-  background-color: green;
-  width: 100px;
-  height: 100px;
+  background-color: #000000;
+  width: 160px;
+  height: 170px;
   position: absolute;
+  top: 45px;
+  left: -125px;
   display: block;
+  border-radius: 0 0 10px 10px;
+  & p {
+    height: 25%;
+    font-size: 16px;
+    padding: 15px;
+  }
+`
+
+const StSelect = styled.div`
+  width: 170px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  font-size: 15px;
+  font-weight: 300;
+  :hover{
+    transition: 0.3s ease-out;
+    background-color: #52b6a8;
+    color: black;
+    font-weight: 500;
+  }
 `
