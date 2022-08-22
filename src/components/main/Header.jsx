@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import headerImg from "../../src_assets/headerImg.JPG"
-import loginBtnImg from "../../src_assets/loginBtnImg.png"
+import headerImg from "../../src_assets/headerImg.JPG";
+import loginBtnImg from "../../src_assets/loginBtnImg.png";
 
 import { useNavigate } from "react-router";
+import Category from "./Category";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,13 +12,14 @@ const Header = () => {
     <StHeader>
       <StNavContainer>
         <StNavUl>
-          <StHeaderLeft onClick={() => navigate("/")}/>
-          <StHeaderRight onClick={() => navigate("/login")}/>
+          <StHeaderLeft onClick={() => navigate("/")} />
+          <StHeaderRight onClick={() => navigate("/login")} />
         </StNavUl>
+        <Category />
       </StNavContainer>
     </StHeader>
-  )
-}
+  );
+};
 
 export default Header;
 
@@ -26,12 +28,11 @@ const StHeader = styled.header`
   min-width: 400px;
   height: 45px;
   margin: auto;
-  z-index:1; 
+  z-index: 1;
   position: sticky;
   top: 0;
-`
-const StNavContainer = styled.nav`
-`
+`;
+const StNavContainer = styled.nav``;
 
 const StNavUl = styled.ul`
   display: flex;
@@ -39,7 +40,7 @@ const StNavUl = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
-`
+`;
 
 const StHeaderLeft = styled.li`
   width: 140px;
@@ -48,7 +49,7 @@ const StHeaderLeft = styled.li`
   background-size: contain;
   border-radius: 0 0 10px 10px;
   cursor: pointer;
-`
+`;
 const StHeaderRight = styled.li`
   width: 140px;
   height: 45px;
@@ -56,4 +57,4 @@ const StHeaderRight = styled.li`
   background-size: contain;
   border-radius: 0 0 10px 10px;
   cursor: pointer;
-`
+`;

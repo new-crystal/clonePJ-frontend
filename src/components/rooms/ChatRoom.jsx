@@ -83,7 +83,7 @@ const ChatRoom = () => {
   //     .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
   // });
 
-  // //채팅방 입장시
+  // //user 채팅방 입장시
   // useEffect(() => {
   //   socket.on("join-msg", (msg) => {
   //     //alert(msg);
