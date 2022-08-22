@@ -4,6 +4,7 @@ import CreateRoom from "./CreateRoom";
 
 const Category = () => {
   const [addRoom, setAddRoom] = useState(false);
+
   return (
     <>
       <CategoryWrap>
