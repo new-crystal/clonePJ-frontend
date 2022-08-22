@@ -8,38 +8,38 @@ import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// const socket = io.connect(`${serverUrl}/api/chat`, {
-//   path: "/socket.io",
-// });
-
 const ChatRoom = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [content, setContent] = useState("");
+  //const token = localStorage.getItem("token");
+  //const payload = decodeToken(token);
   const [chatData, setChatData] = useState({
     chatId: 1,
-    nickname: "susu",
-    content,
-    updatedAt: "2022.08.20.",
+    nickname: "", //payload.nickname
+    content: "",
+    updatedAt: "",
     roomId,
+    chatOwner: true,
   });
   const [chats, setChats] = useState([]);
-  const [socket, setSocket] = useState(null);
 
-  //socket 연결하기
-  useEffect(() => {
-    const newSocket = io.connect(`${serverUrl}/api/chat`, {
-      path: "/socket.io",
-    });
-    setSocket(newSocket);
-    return () => newSocket.close();
-  }, [setSocket]);
+  //socket 연결
+  const socket = io.connect(`${serverUrl}/api/chat`, {
+    path: "/socket.io",
+  });
 
   //socket에 메시지 수신 socket.on()
-  const ChatRoom = async () => {
-    socket.on("ChatData", ({ chatId, nickname, content, updatedAt }) => {
-      setChats([...chats, { chatId, nickname, content, updatedAt }]);
-    });
+  const chatRoom = async () => {
+    socket.on(
+      "ChatData",
+      ({ chatId, nickname, content, updatedAt, chatOwner }) => {
+        setChats([
+          ...chats,
+          { chatId, nickname, content, updatedAt, chatOwner },
+        ]);
+      }
+    );
     try {
       await axios.get(`${serverUrl}/api/chat/${roomId}`);
       return;
@@ -47,6 +47,10 @@ const ChatRoom = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    chatRoom();
+  }, [chats]);
 
   //socket에 메시지 전송 socket.emit()
   const onMessageSubmit = async (e) => {
@@ -57,7 +61,7 @@ const ChatRoom = () => {
       try {
         socket.emit(
           "chatData"
-          // {chatId, nickname, content, updatedAt}
+          // {nickname, content}
         );
         await axios.post(`${serverUrl}/api/chat/${roomId}`, chatData, {
           headers: {},
@@ -95,10 +99,7 @@ const ChatRoom = () => {
     }
   };
 
-  useEffect(() => {
-    ChatRoom();
-  }, []);
-
+  //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
     setContent(e.target.value);
     setChatData({ ...chatData, content });
@@ -113,12 +114,14 @@ const ChatRoom = () => {
         </button>
       </div>
       <p>🟢online 378</p>
-      <MessageBox />
-      {chats
-        ?.sort((a, b) => a.time - b.time)
-        .map((chat) => {
-          <MessageBox key={chat.chatId} chat={chat} />;
-        })}
+      <Messages>
+        <MessageBox />
+        {chats
+          ?.sort((a, b) => a.time - b.time)
+          .map((chat) => {
+            <MessageBox key={chat.chatId} chat={chat} socket={socket} />;
+          })}
+      </Messages>
 
       <TextField
         className="text"
@@ -160,6 +163,18 @@ const Container = styled.form`
     border-radius: 10px;
     margin: 30px;
   }
+`;
+
+const Messages = styled.div`
+  background-color: #495057;
+  color: white;
+  margin-top: 20px;
+  display: block;
+  height: 550px;
+  flex-wrap: wrap;
+  flex-flow: column;
+  justify-content: flex-start;
+  overflow-y: scroll;
 `;
 
 export default ChatRoom;

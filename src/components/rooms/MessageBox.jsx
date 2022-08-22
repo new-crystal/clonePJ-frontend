@@ -1,15 +1,16 @@
 import styled from "styled-components";
-import io from "socket.io-client";
 import axios from "axios";
 import { serverUrl } from "../../redux/modules";
 import { useState } from "react";
+import discordLogo from "../../src_assets/discordLogo.png";
 
-const socket = io.connect("http://localhost:3001");
-
-const MessageBox = ({ chat }) => {
+const MessageBox = ({ chat, socket }) => {
   const [del, setDel] = useState(false);
-  //const { chatId, nickname, content, updatedAt } = chat;
+  //const { chatId, nickname, content, updatedAt, chatOwner } = chat;
   //const token = localStorage.getItem("token");
+  //const payload = decodeToken(token);
+
+  const chatOwner = true;
 
   //메시지 삭제시
   const onClickDelBtnHandler = async () => {
@@ -37,17 +38,22 @@ const MessageBox = ({ chat }) => {
         ) : (
           <>
             <ImgBox></ImgBox>
+            {/* {payload.nickname === nickname ? null : ( */}
             <p className="nickname">
               {/* {nickname} */}
               수수
             </p>
+            {/* )} */}
+
             <p className="time">
               {/* {updatedAt} */}
               2022.08.20.
             </p>
-            <button type="button" onClick={() => onClickDelBtnHandler()}>
-              ✕
-            </button>
+            {chatOwner ? (
+              <button type="button" onClick={() => onClickDelBtnHandler()}>
+                ✕
+              </button>
+            ) : null}
           </>
         )}
       </div>
@@ -60,20 +66,12 @@ const MessageBox = ({ chat }) => {
 };
 
 const Message = styled.div`
-  background-color: #495057;
-  color: white;
-  margin-top: 20px;
-  margin-left: 20px;
-  display: block;
-  height: 550px;
+  width: 100vw;
+  height: 60px;
   flex-wrap: wrap;
   flex-flow: column;
   justify-content: flex-start;
-  overflow-y: scroll;
-
-  .wrap {
-    height: 600px;
-  }
+  display: block;
 
   .name {
     margin: 10px;
@@ -94,6 +92,7 @@ const Message = styled.div`
     font-weight: bold;
     font-size: 20px;
     margin-right: 30px;
+    margin-bottom: 0;
   }
 
   .time {
@@ -104,17 +103,19 @@ const Message = styled.div`
   .content {
     font-size: 18px;
     height: 20px;
-    margin: 0;
+    margin-left: 20px;
+    margin-top: 0;
     flex: 1 1 100%;
   }
 `;
 
 const ImgBox = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-image: url("");
+  background-image: url(${discordLogo});
   background-position: center;
   background-size: cover;
+  margin-right: 10px;
 `;
 export default MessageBox;
