@@ -1,15 +1,33 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { useForm } from "react-hook-form";
-import { useRef } from 'react';
+import Swal from 'sweetalert2';
 
-const SignUpForm = (props) => {
+//axios interceptor
+import axios from "../../shared/axios"
+
+const SignUpForm = () => {
+  const {register, formState:{ errors }, handleSubmit} = useForm();
   const navigate = useNavigate();
 
-  const {register, formState:{ errors }, handleSubmit} = useForm();
 
-  const onSubmit = data => {
-    console.log(data)
+  const onSubmit = (data) => {
+    axios.post('/signup', data)
+    .then(res=> {
+      Swal.fire(
+        '회원가입 완료!',
+        '로그인 이후 이용 가능합니다',
+        'success'
+      )
+      navigate("/login")
+    })
+    .catch (error=>{
+      console.log(error) // 나중에 지우기
+      Swal.fire(
+        '이미 가입한 이메일입니다',
+        'error'
+      )
+    })
   };
 
   return (
@@ -18,20 +36,24 @@ const SignUpForm = (props) => {
       <SignUpFormContainer onSubmit={handleSubmit(onSubmit)}>
         <SignUpLable>이메일</SignUpLable>
         <SignUpFormInput 
-          {...register("email", { required: true, pattern: /^\S+@\S+$/i })} 
+          type="email"
+          {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })} 
         />
-        {errors.email && <p>이메일을 정확히 입력해주세요</p>}
-
+        {errors.email && errors.email.type === "required" && <p> 이메일을 입력해주세요 </p>}
+        {errors.email && errors.email.type === "pattern" && <p>올바른 이메일 형식이 아닙니다</p>}
+        
         <SignUpLable>사용자명</SignUpLable>
         <SignUpFormInput 
-          {...register("nickname", { required: true, maxLength: 10 })} 
+          {...register("nickname", { required: true, maxLength:10, pattern: /^[가-힣]+$/ })} 
         />
         {errors.nickname && errors.nickname.type === "required" && <p> 사용자명을 입력해주세요</p>}
-        {errors.nickname && errors.nickname.type === "maxLength" && <p> 최대 10글자까지 입력 가능합니다</p>}
+        {errors.nickname && errors.nickname.type === "maxLength" && <p> 최대 10자까지 입력 가능합니다</p>}
+        {errors.nickname && errors.nickname.type === "pattern" && <p> 한글만 가능합니다. ※ 띄어쓰기/자음 및 모음 불가 </p>}
 
         <SignUpLable>비밀번호</SignUpLable>
         <SignUpFormInput 
-          {...register("password", { required: true, minLength: 8 })} 
+          type="password"
+          {...register("password", { required: true, minLength:8 })} 
         />
         {errors.password && errors.password.type === "required" && <p> 비밀번호를 입력해주세요</p>}
         {errors.password && errors.password.type === "minLength" && <p> 최소 8글자부터 입력 가능합니다</p>}
@@ -57,7 +79,7 @@ export default SignUpForm
 
 const SignUpContainer = styled.div`
   width: 450px;
-  height: 550px;
+  height: 490px;
   background-color: #36393f;
   position: absolute;
   top: 50%;
@@ -105,6 +127,16 @@ const SignUpFormInput = styled.input`
   border: none;
   color: #adadad;
   padding: 5px;
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-transition: background-color 9999s ease-out;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px white inset !important;
+    -webkit-text-fill-color: #adadad !important;
+  }
 `
 
 const SignUpFormSubmit = styled.button`
@@ -116,7 +148,7 @@ const SignUpFormSubmit = styled.button`
   border: none;
   color: white;
   padding: 5px;
-  margin-top: 25px;
+  margin-top: 20px;
   cursor: pointer;
 `
 
