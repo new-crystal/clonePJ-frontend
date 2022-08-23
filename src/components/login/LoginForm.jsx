@@ -9,7 +9,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios.post('/login', data)
+    axios.post('/login', data) 
     .then(res=> {
       Swal.fire(
         '로그인 완료!',
