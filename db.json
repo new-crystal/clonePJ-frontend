@@ -36,6 +36,13 @@
       "nickname": "일여덟개",
       "birth": "1995-01-14",
       "id": 4
+    },
+    {
+      "email": "test@test.co",
+      "password": "$2a$10$UCThYDeBxJD3ghkOK9dXZu3uh2e.hN8u5kFYWQz6Qex.jjekrGta2",
+      "nickname": "이가여덟개",
+      "birth": "1995-01-14",
+      "id": 5
     }
   ],
   "login": [

@@ -65,22 +65,24 @@ const Header = () => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           localStorage.removeItem('token')
-          .then(Swal.fire('로그아웃', '', 'success'))
+          Swal.fire('로그아웃', '', 'success')
+          setIslog(false)
         } 
       })
     )
   }
 
   useEffect(()=>{checkLoginHandler()})
-
+  console.log(isLog)
   return (
     <>
       <StHeader>
         <StNavContainer>
           <StNavUl>
             <StHeaderLeft onClick={() => navigate("/")} />
-            { {isLog} == false ? 
-              <StHeaderRight onClick={() => navigate("/login")} /> :
+            { isLog === false ?               
+              <StHeaderRight onClick={() => navigate("/login")} /> 
+                :
               <StHeaderRightUser>
                 <div>
                   <StDropdown>
