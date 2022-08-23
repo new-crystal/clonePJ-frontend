@@ -34,7 +34,7 @@ const Header = () => {
       confirmButtonText: '제출하기',
       showLoaderOnConfirm: true,
       preConfirm: (password) => {
-        return axios.post('/quit', password)
+        return axios.post('/user/quit', password)
           .then(response => {
             console.log(response)
           })
@@ -73,7 +73,7 @@ const Header = () => {
   }
 
   useEffect(()=>{checkLoginHandler()})
-  console.log(isLog)
+
   return (
     <>
       <StHeader>

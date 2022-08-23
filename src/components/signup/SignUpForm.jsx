@@ -12,7 +12,7 @@ const SignUpForm = () => {
 
 
   const onSubmit = (data) => {
-    axios.post('/signup', data)
+    axios.post('/user/signup', data)
     .then(res=> {
       localStorage.setItem('token', res.data.accessToken)
       Swal.fire(
