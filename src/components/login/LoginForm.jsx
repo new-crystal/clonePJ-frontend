@@ -18,7 +18,7 @@ const LoginForm = () => {
       navigate("/")
     })
     .catch(error=>{
-      console.log(error) // 나중에 지우기
+      console.log(error)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

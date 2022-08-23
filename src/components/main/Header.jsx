@@ -17,7 +17,7 @@ const Header = (props) => {
 
   const user = "123"
 
-  const a = "11"
+  // window.localStorage.getItem()
 
   return (
     <>
@@ -62,6 +62,8 @@ const StHeader = styled.header`
   z-index: 1;
   position: sticky;
   top: 0;
+  background-color: #363E59;
+  z-index: 1000;
 `;
 const StNavContainer = styled.nav``;
 

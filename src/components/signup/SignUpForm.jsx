@@ -22,7 +22,7 @@ const SignUpForm = () => {
       navigate("/login")
     })
     .catch (error=>{
-      console.log(error) // 나중에 지우기
+      console.log(error)
       Swal.fire({
         icon: 'error',
         title: '이미 가입한 이메일입니다'
