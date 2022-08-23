@@ -4,7 +4,8 @@ const instance = axios.create({
     baseURL: process.env.REACT_APP_ENDPOINT,
     headers: {
         "Content-Type" : "application/json",
-        "timeout" : 30000
+        origin : 0,
+        "timeout" : 30000,
     }
 })
 
