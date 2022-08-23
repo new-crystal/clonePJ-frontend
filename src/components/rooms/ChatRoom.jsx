@@ -7,18 +7,19 @@ import { useParams } from "react-router-dom";
 import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../service/socket";
+import { decodeToken } from "react-jwt";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [content, setContent] = useState("");
   const [connected, setConnected] = useState(false);
-  //const token = localStorage.getItem("token");
-  //const payload = decodeToken(token);
+  const token = localStorage.getItem("token");
+  const payload = decodeToken(token);
+  console.log(token);
   const [chatData, setChatData] = useState({
     chatId: 1,
-    nickname: "", //payload.nickname
+    nickname: payload.nickname,
     content: "",
     updatedAt: "",
     roomId,
@@ -27,29 +28,19 @@ const ChatRoom = () => {
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
 
-  //socket 연결 1
+  //socket 연결
   const socket = io.connect("http://localhost:3000", {
     path: "/socket.io",
   });
-
-  //socket 연결 2
-  // useEffect(() => {
-  //   socket.emit("connect");
-  //   const eventHandler = () => setConnected(true);
-  //   socket.on("connection", eventHandler);
-
-  //   return () => {
-  //     socket.off("connection", eventHandler);
-  //   };
-  // }, []);
 
   //socket에 방 전체 기존 메시지 수신 socket.on()
   const chatRoom = async () => {
     try {
       await socket.on("ChatData", (chatData) => {
-        const response = axios.get(`${serverUrl}/api/chat/${roomId}`, {
+        const response = axios.get(`${serverUrl}/chat/${roomId}`, {
           headers: {
-            origin: "0",
+            Authorization: `Bearer ${token}`,
+            origin: 0,
           },
         });
         setChats(response.result.chatData);
@@ -60,9 +51,9 @@ const ChatRoom = () => {
     }
   };
 
-  // useEffect(() => {
-  //   chatRoom();
-  // }, []);
+  useEffect(() => {
+    chatRoom();
+  }, []);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
@@ -77,12 +68,11 @@ const ChatRoom = () => {
       return alert("채팅을 입력해주세요");
     } else {
       try {
-        socket.emit(
-          "chatData"
-          // {nickname, content}
-        );
-        await axios.post(`${serverUrl}/api/chat/${roomId}`, chatData, {
-          headers: {},
+        socket.emit("chatData", { nickname: payload.nickname, content });
+        await axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         return;
       } catch (err) {
@@ -155,7 +145,6 @@ const ChatRoom = () => {
       </div>
       <p>🟢online 378</p>
       <Messages>
-        <MessageBox />
         {chats
           ?.sort((a, b) => a.time - b.time)
           .map((chat) => {
