@@ -27,8 +27,7 @@ const RoomList = () => {
   }
 
   const getRoomList = async () => {
-    // await axios.get(`/room?category=${category}`)
-    await axios.get('/room')
+    await axios.get(`/room?category=${category}`)
     .then(res=> {
       setRooms(res.data)
     })
