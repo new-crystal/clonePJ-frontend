@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import { decodeToken } from "react-jwt";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const Header = () => {
   const [addRoom, setAddRoom] = useState(false);
 
   const token = window.localStorage.getItem('token')
+  const payload = decodeToken(token);
+
 
   const checkLoginHandler = () => {
     if (window.localStorage.getItem('token') !== null) {
@@ -37,7 +40,6 @@ const Header = () => {
       confirmButtonText: '제출하기',
       showLoaderOnConfirm: true,
       preConfirm: (inputValue) => {
-        console.log(inputValue)
         return axios.post(`${serverUrl}/user/quit`, 
           {
             password: inputValue
@@ -97,7 +99,7 @@ const Header = () => {
               <StHeaderRightUser>
                 <div>
                   <StDropdown>
-                    <p>유저닉네임여덟글</p>
+                    <p>{payload.nickname}</p>
                     <StSelect onClick={() => setAddRoom(!addRoom)}>
                       ♪ 방만들기
                     </StSelect>

@@ -12,9 +12,6 @@ const CreateRoom = ({ setAddRoom }) => {
   const [roomName, setRoomName] = useState("");
   const [category, setCategory] = useState("");
 
-  // const socket = io.connect(`${serverUrl}/api/chat`, {
-  //   path: "/socket.io",
-  // });
   const onChangeRoomNameHandler = (e) => {
     setRoomName(e.target.value);
   };
@@ -24,7 +21,6 @@ const CreateRoom = ({ setAddRoom }) => {
   };
 
   const onClickCreateChat = async (roomName) => {
-    //socket.emit("roomData", roomData, () => {});
     if (roomName.trim() === "") {
       return alert("채팅방 이름을 입력해주세요!");
     } else {

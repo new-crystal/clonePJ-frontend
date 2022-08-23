@@ -69,6 +69,9 @@ const LoginForm = () => {
         <StLogintoSignUp onClick={() => navigate("/signup")}>
           계정이 필요한가요? 가입하기
         </StLogintoSignUp>
+        <StLogintoMain onClick={() => navigate("/")}>
+          홈으로
+        </StLogintoMain>
       </StLoginFormContainer>
     </LoginContainer>
   );
@@ -125,7 +128,6 @@ const StLoginLable = styled.label`
 `;
 
 const StLoginInput = styled.input`
-  /* all: unset; */
   width: 400px;
   height: 35px;
   background-color: #222222;
@@ -160,9 +162,20 @@ const StLoginFormSubmit = styled.button`
 `;
 
 const StLogintoSignUp = styled.h5`
-  width: 400px;
+  width: fit-content;
   margin-top: 5px;
   color: #4495ff;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const StLogintoMain = styled.h5`
+  width: fit-content;
+  align-self: center;
+  margin-top: 40px;
+  color: #868686;
   cursor: pointer;
   :hover {
     text-decoration: underline;
