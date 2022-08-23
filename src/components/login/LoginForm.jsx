@@ -16,7 +16,7 @@ const LoginForm = () => {
     axios
       .post("/user/login", data)
       .then((res) => {
-        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("token", res.data.token);
         Swal.fire("로그인 완료!", "success");
         navigate("/");
       })

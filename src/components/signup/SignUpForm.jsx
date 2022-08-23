@@ -18,7 +18,7 @@ const SignUpForm = () => {
     axios
       .post("/user/signup", data)
       .then((res) => {
-        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("token", res.data.token);
         Swal.fire("회원가입 완료!", "success");
         navigate("/");
       })
