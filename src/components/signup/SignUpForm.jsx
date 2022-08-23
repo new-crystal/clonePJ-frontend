@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import axios from "axios";
+import {serverUrl} from "../../redux/modules/index.js"
 
-//axios interceptor
-import axios from "../../shared/axios";
 
 const SignUpForm = () => {
   const {
@@ -15,15 +15,7 @@ const SignUpForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-<<<<<<< HEAD
-    axios
-      .post("/user/signup", data)
-      .then((res) => {
-        localStorage.setItem("token", res.data.accessToken);
-        Swal.fire("회원가입 완료!", "success");
-        navigate("/");
-=======
-    axios.post('/user/signup', data)
+    axios.post(`${serverUrl}/user/signup`, data)
     .then(res=> {
       localStorage.setItem('token', res.data.token)
       Swal.fire(
@@ -37,15 +29,8 @@ const SignUpForm = () => {
       Swal.fire({
         icon: 'error',
         title: '이미 가입한 이메일입니다'
->>>>>>> 8aab7d7b5d39a1af01e77ecc07ab4709eb3bf937
       })
-      .catch((error) => {
-        console.log(error);
-        Swal.fire({
-          icon: "error",
-          title: "이미 가입한 이메일입니다",
-        });
-      });
+    });
   };
 
   return (

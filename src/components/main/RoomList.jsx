@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import axios from "../../shared/axios"
+import axios from "axios"
+import {serverUrl} from "../../redux/modules/index.js"
 
 import discordLogo from "../../src_assets/discordLogo.png"
 
@@ -12,6 +13,7 @@ const RoomList = () => {
   const [category, setCategory] = useState("");
   
   const categories = [
+    {buttonName:"전체", location:""},
     {buttonName:"게임", location:"game"},
     {buttonName:"커뮤니티", location:"community"},
     {buttonName:"애니/만화", location:"animation"},
@@ -27,7 +29,7 @@ const RoomList = () => {
   }
 
   const getRoomList = async () => {
-    await axios.get(`/room?category=${category}`)
+    await axios.get(`${serverUrl}/room?category=${category}`)
     .then(res=> {
       setRooms(res.data.result)
     })

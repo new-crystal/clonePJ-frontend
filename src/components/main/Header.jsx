@@ -5,8 +5,9 @@ import bot222 from "../../src_assets/bot222.png"
 
 import CreateRoom from "./CreateRoom";
 
+import {serverUrl} from "../../redux/modules/index.js"
 import Swal from "sweetalert2";
-import axios from "../../shared/axios";
+import axios from "axios";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 
@@ -14,6 +15,8 @@ const Header = () => {
   const navigate = useNavigate();
   const [isLog, setIslog] = useState(false);
   const [addRoom, setAddRoom] = useState(false);
+
+  const token = window.localStorage.getItem('token')
 
   const checkLoginHandler = () => {
     if (window.localStorage.getItem('token') !== null) {
@@ -33,8 +36,17 @@ const Header = () => {
       denyButtonText: `취소`,
       confirmButtonText: '제출하기',
       showLoaderOnConfirm: true,
-      preConfirm: () => {
-        return axios.post('/user/quit')
+      preConfirm: (inputValue) => {
+        console.log(inputValue)
+        return axios.post(`${serverUrl}/user/quit`, 
+          {
+            password: inputValue
+          }, {
+          headers: {
+            Authorization: `${token}`
+          }
+        }
+        )
           .then(response => {
             console.log(response)
           })
@@ -62,7 +74,6 @@ const Header = () => {
         confirmButtonText: '로그아웃',
         denyButtonText: `취소`,
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           localStorage.removeItem('token')
           Swal.fire('로그아웃', '', 'success')

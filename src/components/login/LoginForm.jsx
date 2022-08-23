@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import axios from "../../shared/axios";
+import axios from "axios";
 import Swal from "sweetalert2";
+import {serverUrl} from "../../redux/modules/index.js"
 
 const LoginForm = () => {
   const {
@@ -13,7 +14,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios.post('/user/login', data) 
+    axios.post(`${serverUrl}/user/login`, data) 
     .then(res=> {
       localStorage.setItem('token', res.data.token)
       Swal.fire(
@@ -29,14 +30,7 @@ const LoginForm = () => {
         title: 'Oops...',
         text: '이메일 또는 비밀번호가 일치하지 않습니다',
       })
-      .catch((error) => {
-        console.log(error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "이메일 또는 비밀번호가 일치하지 않습니다",
-        });
-      });
+    });
   };
 
   return (
