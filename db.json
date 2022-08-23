@@ -22,6 +22,27 @@
       "nickname": "일여덟개",
       "birth": "1995-01-14",
       "id": 2
+    },
+    {
+      "email": "test10@test.com",
+      "password": "$2a$10$0fXhDorBH6pe9o7.Oq2xWOk/Q5mNDDZfr9P1RBOtVW3OgMuUcRdZO",
+      "nickname": "십",
+      "birth": "1995-01-14",
+      "id": 3
+    },
+    {
+      "email": "1111@naver.com",
+      "password": "$2a$10$k5wjQ87PSVsMxByXL2FpD.mzAbenYtFuMwvURC0Hxy84ID4uwKvE2",
+      "nickname": "일여덟개",
+      "birth": "1995-01-14",
+      "id": 4
+    },
+    {
+      "email": "test@test.co",
+      "password": "$2a$10$UCThYDeBxJD3ghkOK9dXZu3uh2e.hN8u5kFYWQz6Qex.jjekrGta2",
+      "nickname": "이가여덟개",
+      "birth": "1995-01-14",
+      "id": 5
     }
   ],
   "login": [
@@ -36,16 +57,47 @@
       "id": 3
     }
   ],
-  "room":[
+  "room": [
     {
       "roomId": 1,
       "roomName": "채팅하자",
-      "categroy": ""
+      "category": "게임",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용"
     },
     {
       "roomId": 2,
       "roomName": "채팅두번하자",
-      "categroy": ""
+      "category": "커뮤니티",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용2222"
+    },
+    {
+      "roomId": 3,
+      "roomName": "채팅두번하자3",
+      "category": "커뮤니티33",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용2222"
+    },
+    {
+      "roomId": 4,
+      "roomName": "채팅두번하자3",
+      "category": "커뮤니티33",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용2222"
+    },
+    {
+      "roomId": 5,
+      "roomName": "채팅두번하자3",
+      "category": "커뮤니티33",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용2222"
+    },
+    {
+      "roomId": 6,
+      "roomName": "채팅두번하자3",
+      "category": "커뮤니티33",
+      "content": "여기에는 방 소개가 들어갑니다. 우리 방에서 같이 채팅해용2222"
+    }
+  ],
+  "quit": [
+    {
+      "password": "11111111"
     }
   ]
 }

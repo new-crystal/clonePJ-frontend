@@ -9,8 +9,9 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios.post('/login', data)
+    axios.post('/login', data) 
     .then(res=> {
+      localStorage.setItem('token', res.data.accessToken)
       Swal.fire(
         '로그인 완료!',
         'success'
@@ -18,7 +19,7 @@ const LoginForm = () => {
       navigate("/")
     })
     .catch(error=>{
-      console.log(error) // 나중에 지우기
+      console.log(error)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

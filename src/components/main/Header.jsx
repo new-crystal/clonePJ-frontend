@@ -5,28 +5,84 @@ import bot222 from "../../src_assets/bot222.png"
 
 import CreateRoom from "./CreateRoom";
 
+import Swal from "sweetalert2";
+import axios from "../../shared/axios";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Header = (props) => {
+const Header = () => {
   const navigate = useNavigate();
-
+  const [isLog, setIslog] = useState(false);
   const [addRoom, setAddRoom] = useState(false);
 
-  const [menu, setMenu] = useState(false);
+  const checkLoginHandler = () => {
+    if (window.localStorage.getItem('token') !== null) {
+      setIslog(true)
+    }
+  }
 
-  const user = "123"
+  const userQuitHandler = () => {
+    Swal.fire({
+      title: '회원 탈퇴',
+      input: 'password',
+      inputPlaceholder: "비밀번호 제출 시 계정이 영구 삭제됩니다",
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showDenyButton: true,
+      denyButtonText: `취소`,
+      confirmButtonText: '제출하기',
+      showLoaderOnConfirm: true,
+      preConfirm: (password) => {
+        return axios.post('/quit', password)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `요청 실패: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "계정이 삭제되었습니다."
+        })
+      }
+    })
+  }
 
-  const a = "11"
+  const logoutHandler = () => {
+    return(
+      Swal.fire({
+        title: '로그아웃 하시겠습니까?',
+        showDenyButton: true,
+        confirmButtonText: '로그아웃',
+        denyButtonText: `취소`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          localStorage.removeItem('token')
+          Swal.fire('로그아웃', '', 'success')
+          setIslog(false)
+        } 
+      })
+    )
+  }
 
+  useEffect(()=>{checkLoginHandler()})
+  console.log(isLog)
   return (
     <>
       <StHeader>
         <StNavContainer>
           <StNavUl>
             <StHeaderLeft onClick={() => navigate("/")} />
-            { {user} == null ? 
-              <StHeaderRight onClick={() => navigate("/login")} /> :
+            { isLog === false ?               
+              <StHeaderRight onClick={() => navigate("/login")} /> 
+                :
               <StHeaderRightUser>
                 <div>
                   <StDropdown>
@@ -34,10 +90,10 @@ const Header = (props) => {
                     <StSelect onClick={() => setAddRoom(!addRoom)}>
                       ♪ 방만들기
                     </StSelect>
-                    <StSelect onClick={() => {}}>
+                    <StSelect onClick={userQuitHandler}>
                       ◌ 회원탈퇴
                     </StSelect>
-                    <StSelect onClick={() => {}}>
+                    <StSelect onClick={logoutHandler}>
                       ↩ 로그아웃
                     </StSelect>
                   </StDropdown>
@@ -62,6 +118,8 @@ const StHeader = styled.header`
   z-index: 1;
   position: sticky;
   top: 0;
+  background-color: #363E59;
+  z-index: 1000;
 `;
 const StNavContainer = styled.nav``;
 
@@ -103,8 +161,6 @@ const StHeaderRightUser = styled.li`
     display: none;
   }
   :hover > div{
-    width: 100%;
-    height: 100%;
     color: white;
     font-weight: 700;
     padding-left: 10px;
@@ -130,7 +186,6 @@ const StDropdown = styled.div`
 `
 
 const StSelect = styled.div`
-  width: 170px;
   height: 30px;
   display: flex;
   align-items: center;

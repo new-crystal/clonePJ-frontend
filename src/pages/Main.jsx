@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Header from "../components/main/Header";
-import Category from "../components/main/Category";
+import RoomList from "../components/main/RoomList";
 
 import backgroundTop from "../src_assets/backgroundTop.png"
 
@@ -10,7 +10,7 @@ const Main = () => {
     <StContainer>
       <StbackgroundTop/>
       <Header/>
-      <Category/>
+      <RoomList/>
     </StContainer>
 
     )
@@ -19,11 +19,8 @@ const Main = () => {
 export default Main;
 
 const StContainer = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   background-color: #363E59;
 `
 
@@ -32,7 +29,7 @@ const StbackgroundTop = styled.div`
   top: 0;
   bottom: 0;
   width: 100%;
-  height: 100%;
+  height: 200px;
   background: url(${backgroundTop});
   background-repeat: repeat-x;
 `
