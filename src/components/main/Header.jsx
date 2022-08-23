@@ -8,16 +8,18 @@ import CreateRoom from "./CreateRoom";
 import Swal from "sweetalert2";
 import axios from "../../shared/axios";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Header = (props) => {
+const Header = () => {
   const navigate = useNavigate();
-
+  const [isLog, setIslog] = useState(false);
   const [addRoom, setAddRoom] = useState(false);
 
-  const [menu, setMenu] = useState(false);
-
-  const user = "123"
+  const checkLoginHandler = () => {
+    if (window.localStorage.getItem('token') !== null) {
+      setIslog(true)
+    }
+  }
 
   const userQuitHandler = () => {
     Swal.fire({
@@ -27,6 +29,8 @@ const Header = (props) => {
       inputAttributes: {
         autocapitalize: 'off'
       },
+      showDenyButton: true,
+      denyButtonText: `취소`,
       confirmButtonText: '제출하기',
       showLoaderOnConfirm: true,
       preConfirm: (password) => {
@@ -50,9 +54,24 @@ const Header = (props) => {
     })
   }
 
-  // const logoutHandler = () => {
-    
-  // }
+  const logoutHandler = () => {
+    return(
+      Swal.fire({
+        title: '로그아웃 하시겠습니까?',
+        showDenyButton: true,
+        confirmButtonText: '로그아웃',
+        denyButtonText: `취소`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          localStorage.removeItem('token')
+          .then(Swal.fire('로그아웃', '', 'success'))
+        } 
+      })
+    )
+  }
+
+  useEffect(()=>{checkLoginHandler()})
 
   return (
     <>
@@ -60,7 +79,7 @@ const Header = (props) => {
         <StNavContainer>
           <StNavUl>
             <StHeaderLeft onClick={() => navigate("/")} />
-            { {user} == null ? 
+            { {isLog} == false ? 
               <StHeaderRight onClick={() => navigate("/login")} /> :
               <StHeaderRightUser>
                 <div>
@@ -72,7 +91,7 @@ const Header = (props) => {
                     <StSelect onClick={userQuitHandler}>
                       ◌ 회원탈퇴
                     </StSelect>
-                    <StSelect onClick={() => {}}>
+                    <StSelect onClick={logoutHandler}>
                       ↩ 로그아웃
                     </StSelect>
                   </StDropdown>

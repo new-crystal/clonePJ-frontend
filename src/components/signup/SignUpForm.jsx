@@ -14,12 +14,12 @@ const SignUpForm = () => {
   const onSubmit = (data) => {
     axios.post('/signup', data)
     .then(res=> {
+      localStorage.setItem('token', res.data.accessToken)
       Swal.fire(
         '회원가입 완료!',
-        '로그인 이후 이용 가능합니다',
         'success'
       )
-      navigate("/login")
+      navigate("/")
     })
     .catch (error=>{
       console.log(error)

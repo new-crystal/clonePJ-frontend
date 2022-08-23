@@ -11,6 +11,7 @@ const LoginForm = () => {
   const onSubmit = (data) => {
     axios.post('/login', data) 
     .then(res=> {
+      localStorage.setItem('token', res.data.accessToken)
       Swal.fire(
         '로그인 완료!',
         'success'

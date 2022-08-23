@@ -22,6 +22,20 @@
       "nickname": "일여덟개",
       "birth": "1995-01-14",
       "id": 2
+    },
+    {
+      "email": "test10@test.com",
+      "password": "$2a$10$0fXhDorBH6pe9o7.Oq2xWOk/Q5mNDDZfr9P1RBOtVW3OgMuUcRdZO",
+      "nickname": "십",
+      "birth": "1995-01-14",
+      "id": 3
+    },
+    {
+      "email": "1111@naver.com",
+      "password": "$2a$10$k5wjQ87PSVsMxByXL2FpD.mzAbenYtFuMwvURC0Hxy84ID4uwKvE2",
+      "nickname": "일여덟개",
+      "birth": "1995-01-14",
+      "id": 4
     }
   ],
   "login": [
