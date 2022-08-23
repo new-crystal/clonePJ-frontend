@@ -28,7 +28,7 @@ const ChatRoom = () => {
   const [chats, setChats] = useState([]);
 
   //socket 연결 1
-  const socket = io.connect(`${serverUrl}/api/chat`, {
+  const socket = io.connect("http://localhost:3000", {
     path: "/socket.io",
   });
 
@@ -47,7 +47,11 @@ const ChatRoom = () => {
   const chatRoom = async () => {
     try {
       await socket.on("ChatData", (chatData) => {
-        const response = axios.get(`${serverUrl}/api/chat/${roomId}`);
+        const response = axios.get(`${serverUrl}/api/chat/${roomId}`, {
+          headers: {
+            origin: "0",
+          },
+        });
         setChats(response.result.chatData);
         setRoomData(response.result.roomData);
       });
@@ -56,9 +60,9 @@ const ChatRoom = () => {
     }
   };
 
-  useEffect(() => {
-    chatRoom();
-  }, [chatData]);
+  // useEffect(() => {
+  //   chatRoom();
+  // }, []);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
@@ -88,22 +92,22 @@ const ChatRoom = () => {
     setContent("");
   };
 
-//   //user가 채팅방입장시
-//   // socket.on("join-room", (roomName, done) => {
-//   //   socket.join(roomName);
-//   //   done();
-//   //   socket
-//   //     .to(roomName)
-//   //     .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
-//   // });
+  //   //user가 채팅방입장시
+  //   // socket.on("join-room", (roomName, done) => {
+  //   //   socket.join(roomName);
+  //   //   done();
+  //   //   socket
+  //   //     .to(roomName)
+  //   //     .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
+  //   // });
 
-//   // //user 채팅방 입장시
-//   // useEffect(() => {
-//   //   socket.on("join-msg", (msg) => {
-//   //     //alert(msg);
-//   //     setContent(msg);
-//   //   });
-//   // }, [socket]);
+  //   // //user 채팅방 입장시
+  //   // useEffect(() => {
+  //   //   socket.on("join-msg", (msg) => {
+  //   //     //alert(msg);
+  //   //     setContent(msg);
+  //   //   });
+  //   // }, [socket]);
 
   //채팅방 나갈시 확인
   const onClickHomeBtnHandler = () => {
