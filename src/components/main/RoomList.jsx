@@ -75,7 +75,7 @@ return (
                 <StRoomContent>
                   {room.content}
                 </StRoomContent>
-                <StRoomBtn>
+                <StRoomBtn onClick={()=>{navigate(`/room/${room.roomId}`)}}>
                   💬 이 룸에 참가하기
                 </StRoomBtn>
               </StRoomCard>
