@@ -33,8 +33,8 @@ const Header = () => {
       denyButtonText: `취소`,
       confirmButtonText: '제출하기',
       showLoaderOnConfirm: true,
-      preConfirm: (password) => {
-        return axios.post('/user/quit', password)
+      preConfirm: () => {
+        return axios.post('/user/quit')
           .then(response => {
             console.log(response)
           })
