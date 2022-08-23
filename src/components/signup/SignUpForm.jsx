@@ -15,29 +15,12 @@ const SignUpForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-<<<<<<< HEAD
     axios
       .post("/user/signup", data)
       .then((res) => {
         localStorage.setItem("token", res.data.accessToken);
         Swal.fire("회원가입 완료!", "success");
         navigate("/");
-=======
-    axios.post('/user/signup', data)
-    .then(res=> {
-      localStorage.setItem('token', res.data.accessToken)
-      Swal.fire(
-        '회원가입 완료!',
-        'success'
-      )
-      navigate("/")
-    })
-    .catch (error=>{
-      console.log(error)
-      Swal.fire({
-        icon: 'error',
-        title: '이미 가입한 이메일입니다'
->>>>>>> 8aab7d7b5d39a1af01e77ecc07ab4709eb3bf937
       })
       .catch((error) => {
         console.log(error);
