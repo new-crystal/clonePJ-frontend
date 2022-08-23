@@ -9,7 +9,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios.post('/login', data) 
+    axios.post('/user/login', data) 
     .then(res=> {
       localStorage.setItem('token', res.data.accessToken)
       Swal.fire(
