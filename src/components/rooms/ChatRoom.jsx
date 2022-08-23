@@ -7,11 +7,13 @@ import { useParams } from "react-router-dom";
 import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../service/socket";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [content, setContent] = useState("");
+  const [connected, setConnected] = useState(false);
   //const token = localStorage.getItem("token");
   //const payload = decodeToken(token);
   const [chatData, setChatData] = useState({
@@ -22,29 +24,47 @@ const ChatRoom = () => {
     roomId,
     chatOwner: true,
   });
-  const [roomData, setRoomData] = useState();
+  const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
 
-  //socket 연결
+  //socket 연결 1
   const socket = io.connect(`${serverUrl}/api/chat`, {
     path: "/socket.io",
   });
 
-  //socket에 메시지 수신 socket.on()
-  const chatRoom = () => {
-    socket.on(
-      "ChatData",
-      ({ chatId, nickname, content, updatedAt, chatOwner }) => {
+  //socket 연결 2
+  // useEffect(() => {
+  //   socket.emit("connect");
+  //   const eventHandler = () => setConnected(true);
+  //   socket.on("connection", eventHandler);
+
+  //   return () => {
+  //     socket.off("connection", eventHandler);
+  //   };
+  // }, []);
+
+  //socket에 방 전체 기존 메시지 수신 socket.on()
+  const chatRoom = async () => {
+    try {
+      await socket.on("ChatData", (chatData) => {
         const response = axios.get(`${serverUrl}/api/chat/${roomId}`);
         setChats(response.result.chatData);
         setRoomData(response.result.roomData);
-      }
-    );
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     chatRoom();
-  }, []);
+  }, [chatData]);
+
+  //input 값 content에 넣어주고 chatData에 content 넣기
+  const onTextChangeHandler = (e) => {
+    setContent(e.target.value);
+    setChatData({ ...chatData, content });
+  };
 
   //socket에 메시지 전송 socket.emit()
   const onMessageSubmit = async (e) => {
@@ -90,19 +110,41 @@ const ChatRoom = () => {
     const result = window.confirm("채팅방을 나가시겠습니까?");
     if (result) {
       navigate("/");
+      socket.on("disconnect");
     }
   };
 
-  //input 값 content에 넣어주고 chatData에 content 넣기
-  const onTextChangeHandler = (e) => {
-    setContent(e.target.value);
-    setChatData({ ...chatData, content });
-  };
+  //채팅방 삭제하기
+  // const onClickDelBtnHandler = async () => {
+  //   const result = window.confirm("채팅방을 삭제하시겠습니까?");
+  //   if (result) {
+  //     await axios.delete(`${serverUrl}/api/room/${roomId}`, roomId);
+  //     navigate("/");
+  //   }
+  // };
+
+  // useEffect(()=>{
+  //   return () => {
+  //     if(socket){
+  //       socket.disconnect();
+  //       socket = null;
+  //     }
+  //   }
+  // },[])
 
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
         <h1>#항해하는 3조 힘힘!!</h1>
+        {roomData.owner ? (
+          <button
+            type="button"
+            // onClick={() => onClickDelBtnHandler()}
+          >
+            {" "}
+            채팅방 삭제하기
+          </button>
+        ) : null}
         <button type="button" onClick={() => onClickHomeBtnHandler()}>
           채팅방 나가기
         </button>
