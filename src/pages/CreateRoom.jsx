@@ -86,9 +86,8 @@ const CreateRoom = () => {
             onChangeRoomNameHandler(e);
           }}
         />
-        <input
+        <textarea
           className="content"
-          type="text"
           placeholder="채팅방 내용을 적어주세요"
           value={content}
           onChange={(e1) => {
@@ -102,7 +101,7 @@ const CreateRoom = () => {
 };
 const BackGround = styled.div`
   background-color: rgb(56, 62, 87);
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 `;
 
@@ -113,7 +112,9 @@ const Wrap = styled.div`
   height: 700px;
   border-radius: 10px;
   padding: 20px;
-  margin: 100px auto;
+  margin: 0 auto;
+  position: relative;
+  top: 100px;
   text-align: center;
 
   .label {
@@ -132,15 +133,19 @@ const Wrap = styled.div`
     border: 0px;
     display: block;
     margin: 10px auto;
-  }
+    padding-left: 10px;
+  } 
 
   .content {
+    resize: none;
     width: 400px;
     height: 400px;
     border-radius: 5px;
     border: 0px;
     display: block;
     margin: 10px auto;
+    padding: 10px;
+    
   }
 
   button {
