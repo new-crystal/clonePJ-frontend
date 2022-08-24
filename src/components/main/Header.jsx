@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import headerImg from "../../src_assets/headerImg.JPG";
 import loginBtnImg from "../../src_assets/loginBtnImg.png";
-import bot222 from "../../src_assets/bot222.png"
+import bot222 from "../../src_assets/bot222.png";
 
-import CreateRoom from "./CreateRoom";
+import CreateRoom from "../../pages/CreateRoom";
 
 import Swal from "sweetalert2";
 import axios from "../../shared/axios";
@@ -16,63 +16,62 @@ const Header = () => {
   const [addRoom, setAddRoom] = useState(false);
 
   const checkLoginHandler = () => {
-    if (window.localStorage.getItem('token') !== null) {
-      setIslog(true)
+    if (window.localStorage.getItem("token") !== null) {
+      setIslog(true);
     }
-  }
+  };
 
   const userQuitHandler = () => {
     Swal.fire({
-      title: '회원 탈퇴',
-      input: 'password',
+      title: "회원 탈퇴",
+      input: "password",
       inputPlaceholder: "비밀번호 제출 시 계정이 영구 삭제됩니다",
       inputAttributes: {
-        autocapitalize: 'off'
+        autocapitalize: "off",
       },
       showDenyButton: true,
       denyButtonText: `취소`,
-      confirmButtonText: '제출하기',
+      confirmButtonText: "제출하기",
       showLoaderOnConfirm: true,
-      preConfirm: (password) => {
-        return axios.post('/user/quit', password)
-          .then(response => {
-            console.log(response)
+      preConfirm: () => {
+        return axios
+          .post("/user/quit")
+          .then((response) => {
+            console.log(response);
           })
-          .catch(error => {
-            Swal.showValidationMessage(
-              `요청 실패: ${error}`
-            )
-          })
+          .catch((error) => {
+            Swal.showValidationMessage(`요청 실패: ${error}`);
+          });
       },
-      allowOutsideClick: () => !Swal.isLoading()
+      allowOutsideClick: () => !Swal.isLoading(),
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "계정이 삭제되었습니다."
-        })
+          title: "계정이 삭제되었습니다.",
+        });
       }
-    })
-  }
+    });
+  };
 
   const logoutHandler = () => {
-    return(
-      Swal.fire({
-        title: '로그아웃 하시겠습니까?',
-        showDenyButton: true,
-        confirmButtonText: '로그아웃',
-        denyButtonText: `취소`,
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          localStorage.removeItem('token')
-          Swal.fire('로그아웃', '', 'success')
-          setIslog(false)
-        } 
-      })
-    )
-  }
+    return Swal.fire({
+      title: "로그아웃 하시겠습니까?",
+      showDenyButton: true,
+      confirmButtonText: "로그아웃",
+      denyButtonText: `취소`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        Swal.fire("로그아웃", "", "success");
+        setIslog(false);
+      }
+    });
+  };
 
-  useEffect(()=>{checkLoginHandler()})
+  useEffect(() => {
+    checkLoginHandler();
+  });
 
   return (
     <>
@@ -80,30 +79,25 @@ const Header = () => {
         <StNavContainer>
           <StNavUl>
             <StHeaderLeft onClick={() => navigate("/")} />
-            { isLog === false ?               
-              <StHeaderRight onClick={() => navigate("/login")} /> 
-                :
+            {isLog === false ? (
+              <StHeaderRight onClick={() => navigate("/login")} />
+            ) : (
               <StHeaderRightUser>
                 <div>
                   <StDropdown>
                     <p>유저닉네임여덟글</p>
-                    <StSelect onClick={() => setAddRoom(!addRoom)}>
+                    <StSelect onClick={() => navigate("/room/create")}>
                       ♪ 방만들기
                     </StSelect>
-                    <StSelect onClick={userQuitHandler}>
-                      ◌ 회원탈퇴
-                    </StSelect>
-                    <StSelect onClick={logoutHandler}>
-                      ↩ 로그아웃
-                    </StSelect>
+                    <StSelect onClick={userQuitHandler}>◌ 회원탈퇴</StSelect>
+                    <StSelect onClick={logoutHandler}>↩ 로그아웃</StSelect>
                   </StDropdown>
                 </div>
               </StHeaderRightUser>
-            }
+            )}
           </StNavUl>
         </StNavContainer>
       </StHeader>
-      {addRoom ? <CreateRoom setAddRoom={setAddRoom} /> : null}
     </>
   );
 };
@@ -118,7 +112,7 @@ const StHeader = styled.header`
   z-index: 1;
   position: sticky;
   top: 0;
-  background-color: #363E59;
+  background-color: #363e59;
   z-index: 1000;
 `;
 const StNavContainer = styled.nav``;
@@ -157,17 +151,17 @@ const StHeaderRightUser = styled.li`
   border-radius: 0 0 10px 10px;
   background-repeat: no-repeat;
   cursor: pointer;
-  & > div{
+  & > div {
     display: none;
   }
-  :hover > div{
+  :hover > div {
     color: white;
     font-weight: 700;
     padding-left: 10px;
     position: relative;
     display: block;
   }
-  `;
+`;
 
 const StDropdown = styled.div`
   background-color: #000000;
@@ -183,7 +177,7 @@ const StDropdown = styled.div`
     font-size: 16px;
     padding: 15px;
   }
-`
+`;
 
 const StSelect = styled.div`
   height: 30px;
@@ -192,10 +186,10 @@ const StSelect = styled.div`
   padding-left: 15px;
   font-size: 15px;
   font-weight: 300;
-  :hover{
+  :hover {
     transition: 0.3s ease-out;
     background-color: #52b6a8;
     color: black;
     font-weight: 500;
   }
-`
+`;

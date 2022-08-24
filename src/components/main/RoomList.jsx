@@ -29,7 +29,7 @@ const RoomList = () => {
   const getRoomList = async () => {
     await axios.get(`/room?category=${category}`)
     .then(res=> {
-      setRooms(res.data)
+      setRooms(res.data.result)
     })
     .catch(error=>{
       console.log(error)
@@ -56,7 +56,7 @@ return (
       </StCategoryWrap>
       <StRoomWrap>
       {
-        rooms.map((room, roomId)=>{
+        [...rooms].map((room, roomId)=>{
           return(
             <StRoomList key={roomId}>
               <StRoomCard>

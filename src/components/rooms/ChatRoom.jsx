@@ -15,7 +15,6 @@ const ChatRoom = () => {
   const [content, setContent] = useState("");
   const [connected, setConnected] = useState(false);
   const token = localStorage.getItem("token");
-  const payload = decodeToken(token);
   const [chatData, setChatData] = useState("");
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
@@ -176,6 +175,7 @@ const Container = styled.form`
     background-color: #495057;
     border: 0px;
     color: white;
+    cursor: pointer;
   }
   .text {
     background-color: #6c757d;

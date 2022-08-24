@@ -125,6 +125,10 @@ const Message = styled.div`
   justify-content: flex-start;
   display: block;
 
+  button {
+    cursor: pointer;
+  }
+
   .name {
     margin: 10px;
     display: flex;
