@@ -3,9 +3,8 @@ import headerImg from "../../src_assets/headerImg.JPG";
 import loginBtnImg from "../../src_assets/loginBtnImg.png";
 import bot222 from "../../src_assets/bot222.png"
 
-import CreateRoom from "./CreateRoom";
-
 import {serverUrl} from "../../redux/modules/index.js"
+
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router";
@@ -15,7 +14,6 @@ import jwt_decode from "jwt-decode";
 const Header = () => {
   const navigate = useNavigate();
   const [isLog, setIslog] = useState(false);
-  const [addRoom, setAddRoom] = useState(false);
 
   const token = window.localStorage.getItem('token')
   const payload = jwt_decode(token);
