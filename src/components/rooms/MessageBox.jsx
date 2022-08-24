@@ -3,22 +3,21 @@ import axios from "axios";
 import { serverUrl } from "../../redux/modules";
 import { useState } from "react";
 import discordLogo from "../../src_assets/discordLogo.png";
-import { decodeToken } from "react-jwt";
+import { useParams } from "react-router-dom";
 
-const MessageBox = ({ chat, socket }) => {
+const MessageBox = ({ chat }) => {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
-  const { chatId, nickname, content, updatedAt, chatOwner } = chat;
   const token = localStorage.getItem("token");
-  const payload = decodeToken(token);
+  const { roomId } = useParams();
 
   //메시지 삭제시
   const onClickDelBtnHandler = async () => {
-    const result = window.confirm("삭제하시겠습니까?");
+    const result = window.confirm("채팅을 삭제하시겠습니까?");
     if (result) {
       try {
-        socket.emit("chatId", chat.chatId);
+        //socket.emit("chatId", chat.chatId);
         await axios.delete(`${serverUrl}/chat/${chat.chatId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,11 +36,19 @@ const MessageBox = ({ chat, socket }) => {
   };
 
   const onEditChatHandler = async () => {
-    socket.emit("chatData", { content: editContent });
+    //socket.emit("chatData", { content: editContent });
     try {
-      await axios.put(`${serverUrl}/chat/${chatId}`, {
-        content: editContent,
-      });
+      await axios.put(
+        `${serverUrl}/chat/${chat.chatId}`,
+        {
+          content: editContent,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return setEdit(false);
     } catch (err) {
       alert(err.message);
@@ -49,7 +56,7 @@ const MessageBox = ({ chat, socket }) => {
   };
 
   return (
-    <Message key={chatId}>
+    <Message key={chat.chatId}>
       {edit ? (
         <EditBox>
           <Edit
@@ -73,11 +80,9 @@ const MessageBox = ({ chat, socket }) => {
           <div className="name">
             <>
               <ImgBox></ImgBox>
-              {payload.nickname === nickname ? null : (
-                <p className="nickname">{nickname}</p>
-              )}
-              <p className="time">{updatedAt}</p>
-              {chatOwner ? (
+              <p className="nickname">{chat.nickname}</p>
+              <p className="time">{chat.updatedAt}</p>
+              {chat.chatOwner ? (
                 <>
                   <button
                     className="del"
@@ -101,7 +106,7 @@ const MessageBox = ({ chat, socket }) => {
           {del ? (
             <p> 삭제된 채팅입니다.</p>
           ) : (
-            <p className="content">{content}</p>
+            <p className="content">{chat.content}</p>
           )}
         </>
       )}
@@ -113,9 +118,14 @@ const Message = styled.div`
   width: 100vw;
   height: 60px;
   flex-wrap: wrap;
-  flex-flow: column;
-  justify-content: flex-start;
-  display: block;
+  /* flex-flow: column; */
+  /* justify-content: flex-start; */
+  /* position: absolute;
+  top: 60px; */
+
+  button {
+    cursor: pointer;
+  }
 
   .name {
     margin: 10px;
