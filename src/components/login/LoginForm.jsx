@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import {serverUrl} from "../../redux/modules/index.js"
+import { useEffect } from "react";
 
 const LoginForm = () => {
   const {
@@ -12,6 +13,13 @@ const LoginForm = () => {
     handleSubmit,
   } = useForm();
   const navigate = useNavigate();
+
+  const loginCheck = () =>{
+    const token = window.localStorage.getItem('token')
+    if (token !== null) {
+      navigate("/")
+    }
+  }
 
   const onSubmit = (data) => {
     axios.post(`${serverUrl}/user/login`, data) 
@@ -32,6 +40,8 @@ const LoginForm = () => {
       })
     });
   };
+
+  useEffect(()=>{loginCheck()},[])
 
   return (
     <LoginContainer>
