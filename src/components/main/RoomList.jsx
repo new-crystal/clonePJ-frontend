@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import axios from "../../shared/axios"
+import axios from "axios"
+import {serverUrl} from "../../redux/modules/index.js"
 
 import discordLogo from "../../src_assets/discordLogo.png"
+import Swal from "sweetalert2";
 
 const RoomList = () => {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ const RoomList = () => {
   const [category, setCategory] = useState("");
   
   const categories = [
+    {buttonName:"전체", location:""},
     {buttonName:"게임", location:"game"},
     {buttonName:"커뮤니티", location:"community"},
     {buttonName:"애니/만화", location:"animation"},
@@ -27,7 +30,7 @@ const RoomList = () => {
   }
 
   const getRoomList = async () => {
-    await axios.get(`/room?category=${category}`)
+    await axios.get(`${serverUrl}/room?category=${category}`)
     .then(res=> {
       setRooms(res.data.result)
     })
@@ -74,7 +77,16 @@ return (
                 <StRoomContent>
                   {room.content}
                 </StRoomContent>
-                <StRoomBtn onClick={()=>{navigate(`/room/${room.roomId}`)}}>
+                <StRoomBtn onClick={()=>{
+                  if (window.localStorage.getItem('token') !== null) {
+                    navigate(`/room/${room.roomId}`)
+                  } else {
+                    Swal.fire(
+                      '로그인 이후 이용해주세요',
+                    )
+                    navigate('/login')
+                  }
+                }}>
                   💬 이 룸에 참가하기
                 </StRoomBtn>
               </StRoomCard>
@@ -118,7 +130,7 @@ const StRoomWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: auto;
-  justify-content: space-around;
+  justify-content: space-between;
 `
 
 const StRoomList = styled.div`
