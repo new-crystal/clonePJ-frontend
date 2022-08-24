@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -13,6 +14,13 @@ const SignUpForm = () => {
     handleSubmit,
   } = useForm();
   const navigate = useNavigate();
+
+  const loginCheck = () =>{
+    const token = window.localStorage.getItem('token')
+    if (token !== null) {
+      navigate("/")
+    }
+  }
 
   const onSubmit = (data) => {
     axios.post(`${serverUrl}/user/signup`, data)
@@ -33,6 +41,8 @@ const SignUpForm = () => {
     });
   };
 
+  useEffect(()=>{loginCheck()},[])
+
   return (
     <SignUpContainer>
       <h2>계정 만들기</h2>
@@ -51,6 +61,7 @@ const SignUpForm = () => {
 
         <SignUpLable>사용자명</SignUpLable>
         <SignUpFormInput
+          placeholder="한글 8자 이상만 가능"
           {...register("nickname", {
             required: true,
             maxLength: 10,
@@ -69,7 +80,7 @@ const SignUpForm = () => {
 
         <SignUpLable>비밀번호</SignUpLable>
         <SignUpFormInput
-          placeholder="ex) 1999-01-01"
+          placeholder="영문, 숫자, 특수문자($@!%*#?&)를 포함하여 8자리 이상"
           type="password"
           {...register("password", { required: true, minLength: 8, pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/ })}
         />
@@ -85,14 +96,14 @@ const SignUpForm = () => {
 
         <SignUpLable>생년월일</SignUpLable>
         <SignUpFormInput
-          placeholder="ex) 1999-01-01"
+          placeholder="예시) 1900-01-01"
           {...register("birth", {
             required: true,
             pattern:
               /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/,
           })}
         />
-        {errors.birth && <p> 1999-01-01 형식으로 입력해주세요 </p>}
+        {errors.birth && <p> 1900-01-01 형식으로 입력해주세요 </p>}
 
         <SignUpFormSubmit>계속하기</SignUpFormSubmit>
         <StSignUptoLogin onClick={() => navigate("/login")}>

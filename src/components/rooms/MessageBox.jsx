@@ -107,7 +107,7 @@ const MessageBox = ({ chat }) => {
             </>
           </div>
           {del ? (
-            <p> 삭제된 채팅입니다.</p>
+            <p className="delChat"> 삭제된 채팅입니다.</p>
           ) : (
             <p className="content">{chat.content}</p>
           )}
@@ -161,6 +161,10 @@ const Message = styled.div`
     margin-left: 20px;
     margin-top: 0;
     flex: 1 1 100%;
+  }
+
+  .delChat {
+    position: absolute;
   }
 `;
 
