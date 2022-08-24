@@ -7,68 +7,47 @@ import { useParams } from "react-router-dom";
 import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../service/socket";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [content, setContent] = useState("");
   const [connected, setConnected] = useState(false);
-  //const token = localStorage.getItem("token");
-  //const payload = decodeToken(token);
-  const [chatData, setChatData] = useState({
-    chatId: 1,
-    nickname: "", //payload.nickname
-    content: "",
-    updatedAt: "",
-    roomId,
-    chatOwner: true,
-  });
+  const [chatData, setChatData] = useState("");
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
+  const token = localStorage.getItem("token");
 
-  //socket 연결 1
+  //socket 연결
   const socket = io.connect("http://localhost:3000", {
     path: "/socket.io",
   });
 
-  //socket 연결 2
-  // useEffect(() => {
-  //   socket.emit("connect");
-  //   const eventHandler = () => setConnected(true);
-  //   socket.on("connection", eventHandler);
+  //socket에 방 전체 기존 메시지 수신
+  const chatRoom = async () => {
+    socket.emit("newChat", roomId);
+    const response = await axios.get(`${serverUrl}/chat/${roomId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setRoomData(response.data.data.roomData);
+    setChats(response.data.data.chatData);
+  };
 
-<<<<<<< Updated upstream
-  //   return () => {
-  //     socket.off("connection", eventHandler);
-  //   };
-  // }, []);
-=======
   useEffect(() => {
     chatRoom();
   }, [connected, chats]);
->>>>>>> Stashed changes
 
-  //socket에 방 전체 기존 메시지 수신 socket.on()
-  const chatRoom = async () => {
-    try {
-      await socket.on("ChatData", (chatData) => {
-        const response = axios.get(`${serverUrl}/api/chat/${roomId}`, {
-          headers: {
-            origin: "0",
-          },
-        });
-        setChats(response.result.chatData);
-        setRoomData(response.result.roomData);
+  useEffect(() => {
+    socket.on("chatData", (chatData) => {
+      axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // useEffect(() => {
-  //   chatRoom();
-  // }, []);
+    });
+  }, [socket]);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
@@ -76,44 +55,39 @@ const ChatRoom = () => {
     setChatData({ ...chatData, content });
   };
 
-  //socket에 메시지 전송 socket.emit()
+  // 메시지 전송
   const onMessageSubmit = async (e) => {
     e.preventDefault();
     if (content.trim() === "") {
       return alert("채팅을 입력해주세요");
     } else {
-      try {
-        socket.emit(
-          "chatData"
-          // {nickname, content}
-        );
-        await axios.post(`${serverUrl}/api/chat/${roomId}`, chatData, {
-          headers: {},
-        });
-        return;
-      } catch (err) {
-        console.log(err);
-      }
+      await axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setConnected(!connected);
     }
+
     setContent("");
   };
 
-  //   //user가 채팅방입장시
-  //   // socket.on("join-room", (roomName, done) => {
-  //   //   socket.join(roomName);
-  //   //   done();
-  //   //   socket
-  //   //     .to(roomName)
-  //   //     .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
-  //   // });
+  //user가 채팅방입장시
+  socket.on("join-room", (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket
+      .to(roomName)
+      .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
+  });
 
-  //   // //user 채팅방 입장시
-  //   // useEffect(() => {
-  //   //   socket.on("join-msg", (msg) => {
-  //   //     //alert(msg);
-  //   //     setContent(msg);
-  //   //   });
-  //   // }, [socket]);
+  //user 채팅방 입장시
+  useEffect(() => {
+    socket.on("join-msg", (msg) => {
+      alert(msg);
+      //setContent(msg);
+    });
+  }, [socket]);
 
   //채팅방 나갈시 확인
   const onClickHomeBtnHandler = () => {
@@ -125,33 +99,16 @@ const ChatRoom = () => {
   };
 
   //채팅방 삭제하기
-<<<<<<< Updated upstream
-  // const onClickDelBtnHandler = async () => {
-  //   const result = window.confirm("채팅방을 삭제하시겠습니까?");
-  //   if (result) {
-  //     await axios.delete(`${serverUrl}/api/room/${roomId}`, roomId);
-  //     navigate("/");
-  //   }
-  // };
-
-  // useEffect(()=>{
-  //   return () => {
-  //     if(socket){
-  //       socket.disconnect();
-  //       socket = null;
-  //     }
-  //   }
-  // },[])
-=======
   const onClickDelBtnHandler = async () => {
     const result = window.confirm("채팅방을 삭제하시겠습니까?");
     if (result) {
-      await axios.delete(`${serverUrl}/room/${roomId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      navigate("/");
+      await axios
+        .delete(`${serverUrl}/room/${roomId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(navigate("/"));
     }
   };
 
@@ -163,18 +120,13 @@ const ChatRoom = () => {
       }
     };
   }, []);
->>>>>>> Stashed changes
 
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
-        <h1>#항해하는 3조 힘힘!!</h1>
+        <h1># {roomData.roomName}</h1>
         {roomData.owner ? (
-          <button
-            type="button"
-            // onClick={() => onClickDelBtnHandler()}
-          >
-            {" "}
+          <button type="button" onClick={() => onClickDelBtnHandler()}>
             채팅방 삭제하기
           </button>
         ) : null}
@@ -182,16 +134,12 @@ const ChatRoom = () => {
           채팅방 나가기
         </button>
       </div>
-      <p>🟢online 378</p>
+      <p>🟢online {chats.nickname}</p>
       <Messages>
-        <MessageBox />
-        {chats
-          ?.sort((a, b) => a.time - b.time)
-          .map((chat) => {
-            <MessageBox key={chat.chatId} chat={chat} socket={socket} />;
-          })}
+        {chats?.map((chat) => {
+          return <MessageBox key={chat.chatId} chat={chat} socket={socket} />;
+        })}
       </Messages>
-
       <TextField
         className="text"
         onChange={(e) => onTextChangeHandler(e)}
@@ -226,6 +174,7 @@ const Container = styled.form`
     background-color: #495057;
     border: 0px;
     color: white;
+    cursor: pointer;
   }
   .text {
     background-color: #6c757d;
@@ -234,16 +183,17 @@ const Container = styled.form`
   }
 `;
 
-const Messages = styled.div`
+const Messages = styled.section`
   background-color: #495057;
   color: white;
   margin-top: 20px;
-  display: block;
   height: 550px;
   flex-wrap: wrap;
   flex-flow: column;
-  justify-content: flex-start;
   overflow-y: scroll;
+  justify-content: flex-start;
+  column-gap: 0px;
+  flex-direction: column;
 `;
 
 export default ChatRoom;

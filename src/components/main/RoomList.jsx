@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+
 import axios from "axios"
 import {serverUrl} from "../../redux/modules/index.js"
 
 import discordLogo from "../../src_assets/discordLogo.png"
 import Swal from "sweetalert2";
 
+
 const RoomList = () => {
   const navigate = useNavigate();
 
   const [rooms, setRooms] = useState([]);
   const [category, setCategory] = useState("");
-  
+
   const categories = [
     {buttonName:"전체", location:""},
     {buttonName:"게임", location:"game"},
@@ -45,35 +47,30 @@ return (
     <>
       <StCategoryWrap>
         <h1>카테고리 : </h1>
-        {
-          categories.map((category, location)=>{
-            return(
-              <StCategoryBtn key={location}
-                onClick={()=>categoryHandler(category.location)}
-              >
-                {category.buttonName}
-              </StCategoryBtn>
-            )
-          })
-        }
+        {categories.map((category, location) => {
+          return (
+            <StCategoryBtn
+              key={location}
+              onClick={() => categoryHandler(category.location)}
+            >
+              {category.buttonName}
+            </StCategoryBtn>
+          );
+        })}
       </StCategoryWrap>
       <StRoomWrap>
-      {
-        [...rooms].map((room, roomId)=>{
-          return(
+        {[...rooms].map((room, roomId) => {
+          return (
             <StRoomList key={roomId}>
               <StRoomCard>
                 <StRoomHead>
-                  <StRoomHeadImg src={discordLogo}/>
+                  <StRoomHeadImg src={discordLogo} />
                   <div>
-                    <StRoomName>
-                      {room.roomName}
-                    </StRoomName>
-                    <StRoomCategory>
-                      {room.category}
-                    </StRoomCategory>
+                    <StRoomName>{room.roomName}</StRoomName>
+                    <StRoomCategory>{room.category}</StRoomCategory>
                   </div>
                 </StRoomHead>
+
                 <StRoomContent>
                   {room.content}
                 </StRoomContent>
@@ -87,13 +84,13 @@ return (
                     navigate('/login')
                   }
                 }}>
+
                   💬 이 룸에 참가하기
                 </StRoomBtn>
               </StRoomCard>
             </StRoomList>
-          )
-        })
-      }
+          );
+        })}
       </StRoomWrap>
     </>
   );
@@ -106,10 +103,10 @@ const StCategoryWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  & h1{
+  & h1 {
     color: white;
   }
-  & > div{
+  & > div {
     display: flex;
   }
 `;
@@ -133,8 +130,8 @@ const StRoomWrap = styled.div`
   justify-content: space-between;
 `
 
-const StRoomList = styled.div`
-`
+
+const StRoomList = styled.div``;
 
 const StRoomCard = styled.div`
   background-color: #42414b;
@@ -144,26 +141,26 @@ const StRoomCard = styled.div`
   overflow: hidden;
   margin: 10px 15px;
   position: relative;
-  `;
+`;
 
 const StRoomHead = styled.div`
   background-color: #2e2c34;
   height: 80px;
   display: flex;
-`
+`;
 
 const StRoomHeadImg = styled.img`
   width: 80px;
   height: 80px;
   display: flex;
-`
+`;
 
 const StRoomName = styled.p`
   color: white;
   font-size: 20px;
   font-weight: 600;
   margin: 7px 10px;
-`
+`;
 
 const StRoomCategory = styled.div`
   width: fit-content;
@@ -175,14 +172,14 @@ const StRoomCategory = styled.div`
   border-radius: 5px;
   color: white;
   font-weight: 900;
-`
+`;
 
 const StRoomContent = styled.div`
   width: 300px;
   margin: 10px auto;
   font-size: 20px;
   color: #adadad;
-`
+`;
 
 const StRoomBtn = styled.button`
   width: 260px;
@@ -197,4 +194,4 @@ const StRoomBtn = styled.button`
   position: absolute;
   left: 40px;
   bottom: 20px;
-`
+`;
