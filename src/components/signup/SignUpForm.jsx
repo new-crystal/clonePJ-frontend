@@ -40,7 +40,7 @@ const SignUpForm = () => {
         <SignUpLable>이메일</SignUpLable>
         <SignUpFormInput
           type="email"
-          {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })}
+          {...register("email", { required: true, pattern: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/ })}
         />
         {errors.email && errors.email.type === "required" && (
           <p> 이메일을 입력해주세요 </p>
@@ -69,14 +69,18 @@ const SignUpForm = () => {
 
         <SignUpLable>비밀번호</SignUpLable>
         <SignUpFormInput
+          placeholder="ex) 1999-01-01"
           type="password"
-          {...register("password", { required: true, minLength: 8 })}
+          {...register("password", { required: true, minLength: 8, pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/ })}
         />
         {errors.password && errors.password.type === "required" && (
           <p> 비밀번호를 입력해주세요</p>
         )}
         {errors.password && errors.password.type === "minLength" && (
           <p> 최소 8글자부터 입력 가능합니다</p>
+        )}
+        {errors.password && errors.password.type === "pattern" && (
+          <p> 영문, 숫자, 특수문자($@!%*#?&)를 포함하여 8자리 이상만 가능합니다 </p>
         )}
 
         <SignUpLable>생년월일</SignUpLable>

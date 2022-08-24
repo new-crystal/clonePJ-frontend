@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import { decodeToken } from "react-jwt";
+import jwt_decode from "jwt-decode";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -18,8 +18,7 @@ const Header = () => {
   const [addRoom, setAddRoom] = useState(false);
 
   const token = window.localStorage.getItem('token')
-  const payload = decodeToken(token);
-
+  const payload = jwt_decode(token);
 
   const checkLoginHandler = () => {
     if (window.localStorage.getItem('token') !== null) {
@@ -45,7 +44,7 @@ const Header = () => {
             password: inputValue
           }, {
           headers: {
-            Authorization: `${token}`
+            Authorization: `Bearer ${token}`
           }
         }
         )
@@ -58,12 +57,13 @@ const Header = () => {
             )
           })
       },
-      allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
       if (result.isConfirmed) {
+        localStorage.removeItem('token')
         Swal.fire({
           title: "계정이 삭제되었습니다."
         })
+        setIslog(false)
       }
     })
   }
