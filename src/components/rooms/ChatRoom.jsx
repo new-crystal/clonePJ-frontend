@@ -124,15 +124,27 @@ const ChatRoom = () => {
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
-        <h1># {roomData.roomName}</h1>
-        {roomData.owner ? (
-          <button type="button" onClick={() => onClickDelBtnHandler()}>
-            채팅방 삭제하기
-          </button>
-        ) : null}
-        <button type="button" onClick={() => onClickHomeBtnHandler()}>
-          채팅방 나가기
-        </button>
+        {roomData.roomName === undefined ? (
+          <>
+            <h1>삭제된 방입니다 !</h1>
+            <h1>홈으로 이동해주세요!</h1>
+            <button type="button" onClick={() => navigate("/")}>
+              HOME
+            </button>
+          </>
+        ) : (
+          <>
+            <h1># {roomData.roomName}</h1>
+            {roomData.owner ? (
+              <button type="button" onClick={() => onClickDelBtnHandler()}>
+                채팅방 삭제하기
+              </button>
+            ) : null}
+            <button type="button" onClick={() => onClickHomeBtnHandler()}>
+              채팅방 나가기
+            </button>
+          </>
+        )}
       </div>
       <p>🟢online {chats.nickname}</p>
       <Messages>
