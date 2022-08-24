@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
 
 const Header = () => {
   const navigate = useNavigate();
