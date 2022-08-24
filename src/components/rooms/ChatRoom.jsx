@@ -38,10 +38,16 @@ const ChatRoom = () => {
   //   const eventHandler = () => setConnected(true);
   //   socket.on("connection", eventHandler);
 
+<<<<<<< Updated upstream
   //   return () => {
   //     socket.off("connection", eventHandler);
   //   };
   // }, []);
+=======
+  useEffect(() => {
+    chatRoom();
+  }, [connected, chats]);
+>>>>>>> Stashed changes
 
   //socket에 방 전체 기존 메시지 수신 socket.on()
   const chatRoom = async () => {
@@ -119,6 +125,7 @@ const ChatRoom = () => {
   };
 
   //채팅방 삭제하기
+<<<<<<< Updated upstream
   // const onClickDelBtnHandler = async () => {
   //   const result = window.confirm("채팅방을 삭제하시겠습니까?");
   //   if (result) {
@@ -135,6 +142,28 @@ const ChatRoom = () => {
   //     }
   //   }
   // },[])
+=======
+  const onClickDelBtnHandler = async () => {
+    const result = window.confirm("채팅방을 삭제하시겠습니까?");
+    if (result) {
+      await axios.delete(`${serverUrl}/room/${roomId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (socket) {
+        socket.disconnect();
+        socket = null;
+      }
+    };
+  }, []);
+>>>>>>> Stashed changes
 
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
