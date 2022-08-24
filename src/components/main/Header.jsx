@@ -3,8 +3,6 @@ import headerImg from "../../src_assets/headerImg.JPG";
 import loginBtnImg from "../../src_assets/loginBtnImg.png";
 import bot222 from "../../src_assets/bot222.png";
 
-import CreateRoom from "../../pages/CreateRoom";
-
 import Swal from "sweetalert2";
 import axios from "../../shared/axios";
 import { useNavigate } from "react-router";
@@ -13,7 +11,6 @@ import { useEffect, useState } from "react";
 const Header = () => {
   const navigate = useNavigate();
   const [isLog, setIslog] = useState(false);
-  const [addRoom, setAddRoom] = useState(false);
 
   const checkLoginHandler = () => {
     if (window.localStorage.getItem("token") !== null) {

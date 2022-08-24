@@ -1,87 +1,85 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import axios from "../../shared/axios"
+import axios from "../../shared/axios";
 
-import discordLogo from "../../src_assets/discordLogo.png"
+import discordLogo from "../../src_assets/discordLogo.png";
 
 const RoomList = () => {
   const navigate = useNavigate();
 
   const [rooms, setRooms] = useState([]);
   const [category, setCategory] = useState("");
-  
-  const categories = [
-    {buttonName:"게임", location:"game"},
-    {buttonName:"커뮤니티", location:"community"},
-    {buttonName:"애니/만화", location:"animation"},
-    {buttonName:"음악", location:"music"},
-    {buttonName:"기술", location:"tech"},
-    {buttonName:"언어", location:"language"},
-    {buttonName:"영화", location:"movie"},
-    {buttonName:"기타", location:"etc"}
-  ]
 
-  const categoryHandler = (location) =>{
-    setCategory(location)
-  }
+  const categories = [
+    { buttonName: "게임", location: "game" },
+    { buttonName: "커뮤니티", location: "community" },
+    { buttonName: "애니/만화", location: "animation" },
+    { buttonName: "음악", location: "music" },
+    { buttonName: "기술", location: "tech" },
+    { buttonName: "언어", location: "language" },
+    { buttonName: "영화", location: "movie" },
+    { buttonName: "기타", location: "etc" },
+  ];
+
+  const categoryHandler = (location) => {
+    setCategory(location);
+  };
 
   const getRoomList = async () => {
-    await axios.get(`/room?category=${category}`)
-    .then(res=> {
-      setRooms(res.data.result)
-    })
-    .catch(error=>{
-      console.log(error)
-    })
-  }
+    await axios
+      .get(`/room?category=${category}`)
+      .then((res) => {
+        setRooms(res.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  useEffect(()=>{getRoomList()}, [category])
+  useEffect(() => {
+    getRoomList();
+  }, [category]);
 
-return (
+  return (
     <>
       <StCategoryWrap>
         <h1>카테고리 : </h1>
-        {
-          categories.map((category, location)=>{
-            return(
-              <StCategoryBtn key={location}
-                onClick={()=>categoryHandler(category.location)}
-              >
-                {category.buttonName}
-              </StCategoryBtn>
-            )
-          })
-        }
+        {categories.map((category, location) => {
+          return (
+            <StCategoryBtn
+              key={location}
+              onClick={() => categoryHandler(category.location)}
+            >
+              {category.buttonName}
+            </StCategoryBtn>
+          );
+        })}
       </StCategoryWrap>
       <StRoomWrap>
-      {
-        [...rooms].map((room, roomId)=>{
-          return(
+        {[...rooms].map((room, roomId) => {
+          return (
             <StRoomList key={roomId}>
               <StRoomCard>
                 <StRoomHead>
-                  <StRoomHeadImg src={discordLogo}/>
+                  <StRoomHeadImg src={discordLogo} />
                   <div>
-                    <StRoomName>
-                      {room.roomName}
-                    </StRoomName>
-                    <StRoomCategory>
-                      {room.category}
-                    </StRoomCategory>
+                    <StRoomName>{room.roomName}</StRoomName>
+                    <StRoomCategory>{room.category}</StRoomCategory>
                   </div>
                 </StRoomHead>
-                <StRoomContent>
-                  {room.content}
-                </StRoomContent>
-                <StRoomBtn onClick={()=>{navigate(`/room/${room.roomId}`)}}>
+                <StRoomContent>{room.content}</StRoomContent>
+                <StRoomBtn
+                  onClick={() => {
+                    navigate(`/room/${room.roomId}`);
+                  }}
+                >
                   💬 이 룸에 참가하기
                 </StRoomBtn>
               </StRoomCard>
             </StRoomList>
-          )
-        })
-      }
+          );
+        })}
       </StRoomWrap>
     </>
   );
@@ -94,10 +92,10 @@ const StCategoryWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  & h1{
+  & h1 {
     color: white;
   }
-  & > div{
+  & > div {
     display: flex;
   }
 `;
@@ -119,10 +117,9 @@ const StRoomWrap = styled.div`
   flex-wrap: wrap;
   margin: auto;
   justify-content: space-around;
-`
+`;
 
-const StRoomList = styled.div`
-`
+const StRoomList = styled.div``;
 
 const StRoomCard = styled.div`
   background-color: #42414b;
@@ -132,26 +129,26 @@ const StRoomCard = styled.div`
   overflow: hidden;
   margin: 10px 15px;
   position: relative;
-  `;
+`;
 
 const StRoomHead = styled.div`
   background-color: #2e2c34;
   height: 80px;
   display: flex;
-`
+`;
 
 const StRoomHeadImg = styled.img`
   width: 80px;
   height: 80px;
   display: flex;
-`
+`;
 
 const StRoomName = styled.p`
   color: white;
   font-size: 20px;
   font-weight: 600;
   margin: 7px 10px;
-`
+`;
 
 const StRoomCategory = styled.div`
   width: fit-content;
@@ -163,14 +160,14 @@ const StRoomCategory = styled.div`
   border-radius: 5px;
   color: white;
   font-weight: 900;
-`
+`;
 
 const StRoomContent = styled.div`
   width: 300px;
   margin: 10px auto;
   font-size: 20px;
   color: #adadad;
-`
+`;
 
 const StRoomBtn = styled.button`
   width: 260px;
@@ -185,4 +182,4 @@ const StRoomBtn = styled.button`
   position: absolute;
   left: 40px;
   bottom: 20px;
-`
+`;

@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import axios from "axios";
 import { serverUrl } from "../../redux/modules";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import discordLogo from "../../src_assets/discordLogo.png";
 import { useParams } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const MessageBox = ({ chat }) => {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
   const token = localStorage.getItem("token");
+  const payload = jwt_decode(token);
   const { roomId } = useParams();
 
   //메시지 삭제시
@@ -38,18 +40,19 @@ const MessageBox = ({ chat }) => {
   const onEditChatHandler = async () => {
     //socket.emit("chatData", { content: editContent });
     try {
-      await axios.put(
-        `${serverUrl}/chat/${chat.chatId}`,
-        {
-          content: editContent,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      await axios
+        .put(
+          `${serverUrl}/chat/${chat.chatId}`,
+          {
+            content: editContent,
           },
-        }
-      );
-      return setEdit(false);
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(setEdit(false));
     } catch (err) {
       alert(err.message);
     }
@@ -118,10 +121,8 @@ const Message = styled.div`
   width: 100vw;
   height: 60px;
   flex-wrap: wrap;
-  /* flex-flow: column; */
-  /* justify-content: flex-start; */
-  /* position: absolute;
-  top: 60px; */
+  display: block;
+  position: static;
 
   button {
     cursor: pointer;

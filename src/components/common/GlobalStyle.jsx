@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
     * {
@@ -10,5 +10,5 @@ const GlobalStyle = createGlobalStyle`
         justify-content: center;
         align-items: center;
     }
-`
-export default GlobalStyle
+`;
+export default GlobalStyle;

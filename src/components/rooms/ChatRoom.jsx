@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
@@ -37,7 +37,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     chatRoom();
-  }, [connected]);
+  }, [connected, chats]);
 
   useEffect(() => {
     socket.on("chatData", (chatData) => {
@@ -83,7 +83,7 @@ const ChatRoom = () => {
 
   //user 채팅방 입장시
   useEffect(() => {
-    socket.on("msg", (msg) => {
+    socket.on("join-msg", (msg) => {
       alert(msg);
       //setContent(msg);
     });
@@ -102,13 +102,13 @@ const ChatRoom = () => {
   const onClickDelBtnHandler = async () => {
     const result = window.confirm("채팅방을 삭제하시겠습니까?");
     if (result) {
-      await axios.delete(`${serverUrl}/room/${roomId}`, roomId, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          origin: 0,
-        },
-      });
-      navigate("/");
+      await axios
+        .delete(`${serverUrl}/room/${roomId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(navigate("/"));
     }
   };
 
@@ -183,16 +183,16 @@ const Container = styled.form`
   }
 `;
 
-const Messages = styled.div`
+const Messages = styled.section`
   background-color: #495057;
   color: white;
   margin-top: 20px;
   height: 550px;
   flex-wrap: wrap;
   flex-flow: column;
-  justify-content: baseline;
   overflow-y: scroll;
-  column-gap: 20px;
+  justify-content: flex-start;
+  column-gap: 0px;
   flex-direction: column;
 `;
 

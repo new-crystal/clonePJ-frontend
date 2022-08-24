@@ -12,24 +12,23 @@ const LoginForm = () => {
   } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {};
-
-      axios
-        .post("/user/login", data)
-        .then((res) => {
-          localStorage.setItem("token", res.data.token);
-          Swal.fire("로그인 완료!", "success");
-          navigate("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "이메일 또는 비밀번호가 일치하지 않습니다",
-          });
+  const onSubmit = (data) => {
+    axios
+      .post("/user/login", data)
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        Swal.fire("로그인 완료!", "success");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "이메일 또는 비밀번호가 일치하지 않습니다",
         });
-    };
+      });
+  };
 
   return (
     <LoginContainer>
