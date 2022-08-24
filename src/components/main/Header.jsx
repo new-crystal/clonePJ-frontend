@@ -16,10 +16,10 @@ const Header = () => {
   const [isLog, setIslog] = useState(false);
 
   const token = window.localStorage.getItem('token')
-  const payload = jwt_decode(token);
 
+  
   const checkLoginHandler = () => {
-    if (window.localStorage.getItem('token') !== null) {
+    if (token !== null) {
       setIslog(true)
     }
   }
@@ -47,7 +47,6 @@ const Header = () => {
         }
         )
           .then(response => {
-            console.log(response)
           })
           .catch(error => {
             Swal.showValidationMessage(
@@ -57,11 +56,9 @@ const Header = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('token')
         Swal.fire({
           title: "계정이 삭제되었습니다."
         })
-        setIslog(false)
       }
     })
   }
@@ -75,15 +72,15 @@ const Header = () => {
         denyButtonText: `취소`,
       }).then((result) => {
         if (result.isConfirmed) {
+          setIslog(false)
           localStorage.removeItem('token')
           Swal.fire('로그아웃', '', 'success')
-          setIslog(false)
         } 
       })
     )
   }
 
-  useEffect(()=>{checkLoginHandler()})
+  useEffect(()=>{checkLoginHandler()},[])
 
   return (
     <>
@@ -97,8 +94,8 @@ const Header = () => {
               <StHeaderRightUser>
                 <div>
                   <StDropdown>
-                    <p>{payload.nickname}</p>
-                    <StSelect onClick={() => setAddRoom(!addRoom)}>
+                      <p>Menu</p>
+                    <StSelect onClick={() => navigate("/room/create")}>
                       ♪ 방만들기
                     </StSelect>
                     <StSelect onClick={userQuitHandler}>
@@ -114,7 +111,6 @@ const Header = () => {
           </StNavUl>
         </StNavContainer>
       </StHeader>
-      {addRoom ? <CreateRoom setAddRoom={setAddRoom} /> : null}
     </>
   );
 };
