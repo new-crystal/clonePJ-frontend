@@ -32,11 +32,10 @@ const LoginForm = () => {
       navigate("/")
     })
     .catch(error=>{
-      console.log(error)
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: '이메일 또는 비밀번호가 일치하지 않습니다',
+        text: `${error.response.data.message}`,
       })
     });
   };
@@ -54,7 +53,7 @@ const LoginForm = () => {
         <StLoginLable>이메일</StLoginLable>
         <StLoginInput
           type="email"
-          {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })}
+          {...register("email", { required: true, pattern: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/ })}
         />
         {errors.email && errors.email.type === "required" && (
           <p> 이메일을 입력해주세요 </p>
@@ -66,13 +65,13 @@ const LoginForm = () => {
         <StLoginLable>비밀번호</StLoginLable>
         <StLoginInput
           type="password"
-          {...register("password", { required: true, minLength: 8 })}
+          {...register("password", { required: true, minLength:8, pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/ })}
         />
         {errors.password && errors.password.type === "required" && (
           <p> 비밀번호를 입력해주세요</p>
         )}
-        {errors.password && errors.password.type === "minLength" && (
-          <p> 최소 8글자부터 입력 가능합니다</p>
+        {errors.password && errors.password.type === "required" && (
+          <p> 비밀번호는 8자 이상입니다</p>
         )}
 
         <StLoginFormSubmit>로그인</StLoginFormSubmit>
