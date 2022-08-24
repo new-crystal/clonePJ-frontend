@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import axios from "../../shared/axios";
+import axios from "axios";
 import Swal from "sweetalert2";
+import {serverUrl} from "../../redux/modules/index.js"
 
 const LoginForm = () => {
   const {
@@ -13,21 +14,23 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
-    axios
-      .post("/user/login", data)
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-        Swal.fire("로그인 완료!", "success");
-        navigate("/");
+    axios.post(`${serverUrl}/user/login`, data) 
+    .then(res=> {
+      localStorage.setItem('token', res.data.token)
+      Swal.fire(
+        '로그인 완료!',
+        'success'
+      )
+      navigate("/")
+    })
+    .catch(error=>{
+      console.log(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '이메일 또는 비밀번호가 일치하지 않습니다',
       })
-      .catch((error) => {
-        console.log(error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "이메일 또는 비밀번호가 일치하지 않습니다",
-        });
-      });
+    });
   };
 
   return (
@@ -66,6 +69,9 @@ const LoginForm = () => {
         <StLogintoSignUp onClick={() => navigate("/signup")}>
           계정이 필요한가요? 가입하기
         </StLogintoSignUp>
+        <StLogintoMain onClick={() => navigate("/")}>
+          홈으로
+        </StLogintoMain>
       </StLoginFormContainer>
     </LoginContainer>
   );
@@ -122,7 +128,6 @@ const StLoginLable = styled.label`
 `;
 
 const StLoginInput = styled.input`
-  /* all: unset; */
   width: 400px;
   height: 35px;
   background-color: #222222;
@@ -157,9 +162,20 @@ const StLoginFormSubmit = styled.button`
 `;
 
 const StLogintoSignUp = styled.h5`
-  width: 400px;
+  width: fit-content;
   margin-top: 5px;
   color: #4495ff;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const StLogintoMain = styled.h5`
+  width: fit-content;
+  align-self: center;
+  margin-top: 40px;
+  color: #868686;
   cursor: pointer;
   :hover {
     text-decoration: underline;
