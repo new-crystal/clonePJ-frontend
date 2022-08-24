@@ -16,12 +16,20 @@ const ChatRoom = () => {
   const [chatData, setChatData] = useState("");
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
+  const [room, setRoom] = useState(true);
   const token = localStorage.getItem("token");
 
   //socket 연결
   const socket = io.connect("http://localhost:3000", {
     path: "/socket.io",
   });
+
+  //토큰 없을시 로그인으로
+  useEffect(() => {
+    if (token === "") {
+      return navigate("/login");
+    }
+  }, []);
 
   //socket에 방 전체 기존 메시지 수신
   const chatRoom = async () => {
@@ -37,17 +45,11 @@ const ChatRoom = () => {
 
   useEffect(() => {
     chatRoom();
-  }, [connected, chats]);
+  }, [room]);
 
   useEffect(() => {
-    socket.on("chatData", (chatData) => {
-      axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    });
-  }, [socket]);
+    socket.on("newChat", chats);
+  }, []);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
@@ -58,17 +60,21 @@ const ChatRoom = () => {
   // 메시지 전송
   const onMessageSubmit = async (e) => {
     e.preventDefault();
-    if (content.trim() === "") {
-      return alert("채팅을 입력해주세요");
+    if (content !== null) {
+      await axios
+        .post(`${serverUrl}/chat/${roomId}`, chatData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(setRoom(!room))
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      await axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      alert("채팅을 입력해주세요");
       setConnected(!connected);
     }
-
     setContent("");
   };
 
@@ -116,7 +122,6 @@ const ChatRoom = () => {
     return () => {
       if (socket) {
         socket.disconnect();
-        socket = null;
       }
     };
   }, []);
@@ -124,27 +129,15 @@ const ChatRoom = () => {
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
-        {roomData.roomName === undefined ? (
-          <>
-            <h1>삭제된 방입니다 !</h1>
-            <h1>홈으로 이동해주세요!</h1>
-            <button type="button" onClick={() => navigate("/")}>
-              HOME
-            </button>
-          </>
-        ) : (
-          <>
-            <h1># {roomData.roomName}</h1>
-            {roomData.owner ? (
-              <button type="button" onClick={() => onClickDelBtnHandler()}>
-                채팅방 삭제하기
-              </button>
-            ) : null}
-            <button type="button" onClick={() => onClickHomeBtnHandler()}>
-              채팅방 나가기
-            </button>
-          </>
-        )}
+        <h1># {roomData.roomName}</h1>
+        {roomData.owner ? (
+          <button type="button" onClick={() => onClickDelBtnHandler()}>
+            채팅방 삭제하기
+          </button>
+        ) : null}
+        <button type="button" onClick={() => onClickHomeBtnHandler()}>
+          채팅방 나가기
+        </button>
       </div>
       <p>🟢online {chats.nickname}</p>
       <Messages>
@@ -164,7 +157,7 @@ const ChatRoom = () => {
 };
 
 const Container = styled.form`
-  max-width: 1200px;
+  max-width: 800px;
   max-height: 800px;
   width: 100vw;
   height: 100vh;
