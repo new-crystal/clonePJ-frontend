@@ -1,19 +1,16 @@
 import styled from "styled-components";
 import axios from "axios";
 import { serverUrl } from "../../redux/modules";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import discordLogo from "../../src_assets/discordLogo.png";
-import { decodeToken } from "react-jwt";
 import { useParams } from "react-router-dom";
 
-const MessageBox = ({ chat, socket }) => {
+const MessageBox = ({ chat }) => {
   const [del, setDel] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
   const token = localStorage.getItem("token");
-  const payload = decodeToken(token);
   const { roomId } = useParams();
-  console.log(chat);
 
   //메시지 삭제시
   const onClickDelBtnHandler = async () => {
@@ -121,9 +118,10 @@ const Message = styled.div`
   width: 100vw;
   height: 60px;
   flex-wrap: wrap;
-  flex-flow: column;
-  justify-content: flex-start;
-  display: block;
+  /* flex-flow: column; */
+  /* justify-content: flex-start; */
+  /* position: absolute;
+  top: 60px; */
 
   button {
     cursor: pointer;

@@ -13,40 +13,23 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data) => {};
-  // <<<<<<< HEAD
-  //     axios
-  //       .post("/user/login", data)
-  //       .then((res) => {
-  //         localStorage.setItem("token", res.data.token);
-  //         Swal.fire("로그인 완료!", "success");
-  //         navigate("/");
-  // =======
-  //     axios.post('/user/login', data)
-  //     .then(res=> {
-  //       localStorage.setItem('token', res.data.token)
-  //       Swal.fire(
-  //         '로그인 완료!',
-  //         'success'
-  //       )
-  //       navigate("/")
-  //     })
-  //     .catch(error=>{
-  //       console.log(error)
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Oops...',
-  //         text: '이메일 또는 비밀번호가 일치하지 않습니다',
-  // // >>>>>>> 2c8d401162dc5b7f25d7ffda82401f32db702bd1
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //         Swal.fire({
-  //           icon: "error",
-  //           title: "Oops...",
-  //           text: "이메일 또는 비밀번호가 일치하지 않습니다",
-  //         });
-  //       });
-  //   };
+
+      axios
+        .post("/user/login", data)
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          Swal.fire("로그인 완료!", "success");
+          navigate("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "이메일 또는 비밀번호가 일치하지 않습니다",
+          });
+        });
+    };
 
   return (
     <LoginContainer>

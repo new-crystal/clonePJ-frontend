@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
@@ -7,17 +7,16 @@ import { useParams } from "react-router-dom";
 import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { decodeToken } from "react-jwt";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const [content, setContent] = useState("");
   const [connected, setConnected] = useState(false);
-  const token = localStorage.getItem("token");
   const [chatData, setChatData] = useState("");
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
+  const token = localStorage.getItem("token");
 
   //socket 연결
   const socket = io.connect("http://localhost:3000", {
@@ -83,12 +82,12 @@ const ChatRoom = () => {
   });
 
   //user 채팅방 입장시
-  // useEffect(() => {
-  //   socket.on("msg", (msg) => {
-  //     //alert(msg);
-  //     setContent(msg);
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket.on("msg", (msg) => {
+      alert(msg);
+      //setContent(msg);
+    });
+  }, [socket]);
 
   //채팅방 나갈시 확인
   const onClickHomeBtnHandler = () => {
@@ -103,7 +102,7 @@ const ChatRoom = () => {
   const onClickDelBtnHandler = async () => {
     const result = window.confirm("채팅방을 삭제하시겠습니까?");
     if (result) {
-      await axios.delete(`${serverUrl}/api/room/${roomId}`, roomId, {
+      await axios.delete(`${serverUrl}/room/${roomId}`, roomId, {
         headers: {
           Authorization: `Bearer ${token}`,
           origin: 0,
@@ -135,7 +134,7 @@ const ChatRoom = () => {
           채팅방 나가기
         </button>
       </div>
-      <p>🟢online 378</p>
+      <p>🟢online {chats.nickname}</p>
       <Messages>
         {chats?.map((chat) => {
           return <MessageBox key={chat.chatId} chat={chat} socket={socket} />;
@@ -188,12 +187,13 @@ const Messages = styled.div`
   background-color: #495057;
   color: white;
   margin-top: 20px;
-  display: block;
   height: 550px;
   flex-wrap: wrap;
   flex-flow: column;
-  justify-content: flex-start;
+  justify-content: baseline;
   overflow-y: scroll;
+  column-gap: 20px;
+  flex-direction: column;
 `;
 
 export default ChatRoom;
