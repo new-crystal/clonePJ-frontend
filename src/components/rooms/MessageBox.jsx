@@ -11,8 +11,8 @@ const MessageBox = ({ chat }) => {
   const [edit, setEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
   const token = localStorage.getItem("token");
-  const payload = jwt_decode(token);
-  const { roomId } = useParams();
+  //const payload = jwt_decode(token);
+  //const { roomId } = useParams();
 
   //메시지 삭제시
   const onClickDelBtnHandler = async () => {
