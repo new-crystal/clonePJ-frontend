@@ -25,12 +25,11 @@ const SignUpForm = () => {
   const onSubmit = (data) => {
     axios.post(`${serverUrl}/user/signup`, data)
     .then(res=> {
-      localStorage.setItem('token', res.data.token)
       Swal.fire(
         '회원가입 완료!',
         'success'
       )
-      navigate("/")
+      navigate("/login")
     })
     .catch (error=>{
       console.log(error)

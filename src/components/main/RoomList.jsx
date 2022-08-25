@@ -76,7 +76,7 @@ return (
                 </StRoomContent>
                 <StRoomBtn onClick={()=>{
                   if (window.localStorage.getItem('token') !== null) {
-                    navigate(`/room/${room.roomId}`, {replace: true})
+                    navigate(`/room/${room.roomId}`)
                   } else {
                     Swal.fire(
                       '로그인 이후 이용해주세요',
