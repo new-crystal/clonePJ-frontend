@@ -45,6 +45,7 @@ const RoomList = () => {
 
 return (
     <>
+      
       <StCategoryWrap>
         <h1>카테고리 : </h1>
         {categories.map((category, location) => {
@@ -59,7 +60,10 @@ return (
         })}
       </StCategoryWrap>
       <StRoomWrap>
-        {[...rooms].map((room, roomId) => {
+        {
+          rooms == "" ?
+          <p> 리스트가 없습니다 👽</p> :
+        [...rooms].map((room, roomId) => {
           return (
             <StRoomList key={roomId}>
               <StRoomCard>
@@ -127,11 +131,19 @@ const StRoomWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: auto;
-  justify-content: space-between;
+  & p {
+    color: white;
+    font-size: 50px;
+    width: auto;
+    margin: auto;
+  }
 `
 
+const StRoomList = styled.div`
+  margin: 0 auto;
+  display: flex;
 
-const StRoomList = styled.div``;
+`;
 
 const StRoomCard = styled.div`
   background-color: #42414b;
@@ -139,7 +151,7 @@ const StRoomCard = styled.div`
   height: 430px;
   border-radius: 4px;
   overflow: hidden;
-  margin: 10px 15px;
+  margin: 10px 20px;
   position: relative;
 `;
 
