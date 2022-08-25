@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
 import MessageBox from "./MessageBox";
@@ -102,17 +102,18 @@ const ChatRoom = () => {
 
   useEffect(() => {
     chatRoom();
-  }, [room, chats]);
+  }, [room]);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
-    setContent(e.target.value);
-    setChatData({ ...chatData, content });
+    const contents = e.target.value;
+    setContent(contents);
+    setChatData({ ...chatData, content: contents });
   };
 
   // 메시지 전송
-  const onMessageSubmit = async (e) => {
-    e.preventDefault();
+  const onMessageSubmit = async (e1) => {
+    e1.preventDefault();
     if (content !== null) {
       //socket.emit("sendMessage", chatData);
       await axios
@@ -158,7 +159,7 @@ const ChatRoom = () => {
   chatRoom();
 
   return (
-    <Container onSubmit={(e) => onMessageSubmit(e)}>
+    <Container onSubmit={(e1) => onMessageSubmit(e1)}>
       <div>
         <h1># {roomData.roomName}</h1>
         {roomData.owner ? (
@@ -178,7 +179,7 @@ const ChatRoom = () => {
       </Messages>
       <TextField
         className="text"
-        onChange={(e) => onTextChangeHandler(e)}
+        onChange={onTextChangeHandler}
         variant="outlined"
         label="#메시지 보내기"
         value={content}

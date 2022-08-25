@@ -4,8 +4,7 @@ import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import axios from "axios";
-import {serverUrl} from "../../redux/modules/index.js"
-
+import { serverUrl } from "../../redux/modules/index.js";
 
 const SignUpForm = () => {
   const {
@@ -15,33 +14,33 @@ const SignUpForm = () => {
   } = useForm();
   const navigate = useNavigate();
 
-  const loginCheck = () =>{
-    const token = window.localStorage.getItem('token')
+  const loginCheck = () => {
+    const token = window.localStorage.getItem("token");
     if (token !== null) {
-      navigate("/")
+      navigate("/");
     }
-  }
-
-  const onSubmit = (data) => {
-    axios.post(`${serverUrl}/user/signup`, data)
-    .then(res=> {
-      localStorage.setItem('token', res.data.token)
-      Swal.fire(
-        '회원가입 완료!',
-        'success'
-      )
-      navigate("/")
-    })
-    .catch (error=>{
-      console.log(error)
-      Swal.fire({
-        icon: 'error',
-        title: '이미 가입한 이메일입니다'
-      })
-    });
   };
 
-  useEffect(()=>{loginCheck()},[])
+  const onSubmit = (data) => {
+    axios
+      .post(`${serverUrl}/user/signup`, data)
+      .then((res) => {
+        localStorage.setItem("token", res.data.token);
+        Swal.fire("회원가입 완료!", "success");
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "이미 가입한 이메일입니다",
+        });
+      });
+  };
+
+  useEffect(() => {
+    loginCheck();
+  }, []);
 
   return (
     <SignUpContainer>
@@ -50,7 +49,11 @@ const SignUpForm = () => {
         <SignUpLable>이메일</SignUpLable>
         <SignUpFormInput
           type="email"
-          {...register("email", { required: true, pattern: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/ })}
+          {...register("email", {
+            required: true,
+            pattern:
+              /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+          })}
         />
         {errors.email && errors.email.type === "required" && (
           <p> 이메일을 입력해주세요 </p>
@@ -82,7 +85,12 @@ const SignUpForm = () => {
         <SignUpFormInput
           placeholder="영문, 숫자, 특수문자($@!%*#?&)를 포함하여 8자리 이상"
           type="password"
-          {...register("password", { required: true, minLength: 8, pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/ })}
+          {...register("password", {
+            required: true,
+            minLength: 8,
+            pattern:
+              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
+          })}
         />
         {errors.password && errors.password.type === "required" && (
           <p> 비밀번호를 입력해주세요</p>
@@ -91,7 +99,10 @@ const SignUpForm = () => {
           <p> 최소 8글자부터 입력 가능합니다</p>
         )}
         {errors.password && errors.password.type === "pattern" && (
-          <p> 영문, 숫자, 특수문자($@!%*#?&)를 포함하여 8자리 이상만 가능합니다 </p>
+          <p>
+            {" "}
+            영문, 숫자, 특수문자($@!%*#?&)를 포함하여 8자리 이상만 가능합니다{" "}
+          </p>
         )}
 
         <SignUpLable>생년월일</SignUpLable>

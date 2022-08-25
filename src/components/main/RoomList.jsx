@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 
-import axios from "axios"
-import {serverUrl} from "../../redux/modules/index.js"
+import axios from "axios";
+import { serverUrl } from "../../redux/modules/index.js";
 
-import discordLogo from "../../src_assets/discordLogo.png"
+import discordLogo from "../../src_assets/discordLogo.png";
 import Swal from "sweetalert2";
-
 
 const RoomList = () => {
   const navigate = useNavigate();
@@ -16,34 +15,37 @@ const RoomList = () => {
   const [category, setCategory] = useState("");
 
   const categories = [
-    {buttonName:"전체", location:""},
-    {buttonName:"게임", location:"game"},
-    {buttonName:"커뮤니티", location:"community"},
-    {buttonName:"애니/만화", location:"animation"},
-    {buttonName:"음악", location:"music"},
-    {buttonName:"기술", location:"tech"},
-    {buttonName:"언어", location:"language"},
-    {buttonName:"영화", location:"movie"},
-    {buttonName:"기타", location:"etc"}
-  ]
+    { buttonName: "전체", location: "" },
+    { buttonName: "게임", location: "game" },
+    { buttonName: "커뮤니티", location: "community" },
+    { buttonName: "애니/만화", location: "animation" },
+    { buttonName: "음악", location: "music" },
+    { buttonName: "기술", location: "tech" },
+    { buttonName: "언어", location: "language" },
+    { buttonName: "영화", location: "movie" },
+    { buttonName: "기타", location: "etc" },
+  ];
 
-  const categoryHandler = (location) =>{
-    setCategory(location)
-  }
+  const categoryHandler = (location) => {
+    setCategory(location);
+  };
 
   const getRoomList = async () => {
-    await axios.get(`${serverUrl}/room?category=${category}`)
-    .then(res=> {
-      setRooms(res.data.result)
-    })
-    .catch(error=>{
-      console.log(error)
-    })
-  }
+    await axios
+      .get(`${serverUrl}/room?category=${category}`)
+      .then((res) => {
+        setRooms(res.data.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  useEffect(()=>{getRoomList()}, [category])
+  useEffect(() => {
+    getRoomList();
+  }, [category]);
 
-return (
+  return (
     <>
       <StCategoryWrap>
         <h1>카테고리 : </h1>
@@ -71,20 +73,17 @@ return (
                   </div>
                 </StRoomHead>
 
-                <StRoomContent>
-                  {room.content}
-                </StRoomContent>
-                <StRoomBtn onClick={()=>{
-                  if (window.localStorage.getItem('token') !== null) {
-                    navigate(`/room/${room.roomId}`, {replace: true})
-                  } else {
-                    Swal.fire(
-                      '로그인 이후 이용해주세요',
-                    )
-                    navigate('/login')
-                  }
-                }}>
-
+                <StRoomContent>{room.content}</StRoomContent>
+                <StRoomBtn
+                  onClick={() => {
+                    if (window.localStorage.getItem("token") !== null) {
+                      navigate(`/room/${room.roomId}`);
+                    } else {
+                      Swal.fire("로그인 이후 이용해주세요");
+                      navigate("/login");
+                    }
+                  }}
+                >
                   💬 이 룸에 참가하기
                 </StRoomBtn>
               </StRoomCard>
@@ -128,8 +127,7 @@ const StRoomWrap = styled.div`
   flex-wrap: wrap;
   margin: auto;
   justify-content: space-between;
-`
-
+`;
 
 const StRoomList = styled.div``;
 
