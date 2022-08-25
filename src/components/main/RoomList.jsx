@@ -61,35 +61,38 @@ const RoomList = () => {
         })}
       </StCategoryWrap>
       <StRoomWrap>
-        {[...rooms].map((room, roomId) => {
-          return (
-            <StRoomList key={roomId}>
-              <StRoomCard>
-                <StRoomHead>
-                  <StRoomHeadImg src={discordLogo} />
-                  <div>
-                    <StRoomName>{room.roomName}</StRoomName>
-                    <StRoomCategory>{room.category}</StRoomCategory>
-                  </div>
-                </StRoomHead>
-
-                <StRoomContent>{room.content}</StRoomContent>
-                <StRoomBtn
-                  onClick={() => {
-                    if (window.localStorage.getItem("token") !== null) {
-                      navigate(`/room/${room.roomId}`);
-                    } else {
-                      Swal.fire("로그인 이후 이용해주세요");
-                      navigate("/login");
-                    }
-                  }}
-                >
-                  💬 이 룸에 참가하기
-                </StRoomBtn>
-              </StRoomCard>
-            </StRoomList>
-          );
-        })}
+        {rooms == "" ? (
+          <StAlertMsg> 리스트가 없습니다 👽</StAlertMsg>
+        ) : (
+          [...rooms].map((room, roomId) => {
+            return (
+              <StRoomList key={roomId}>
+                <StRoomCard>
+                  <StRoomHead>
+                    <StRoomHeadImg src={discordLogo} />
+                    <div>
+                      <StRoomName>{room.roomName}</StRoomName>
+                      <StRoomCategory>{room.category}</StRoomCategory>
+                    </div>
+                  </StRoomHead>
+                  <StRoomContent>{room.content}</StRoomContent>
+                  <StRoomBtn
+                    onClick={() => {
+                      if (window.localStorage.getItem("token") !== null) {
+                        navigate(`/room/${room.roomId}`);
+                      } else {
+                        Swal.fire("로그인 이후 이용해주세요");
+                        navigate("/login");
+                      }
+                    }}
+                  >
+                    💬 이 룸에 참가하기
+                  </StRoomBtn>
+                </StRoomCard>
+              </StRoomList>
+            );
+          })
+        )}
       </StRoomWrap>
     </>
   );
@@ -126,10 +129,18 @@ const StRoomWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: auto;
-  justify-content: space-between;
 `;
 
-const StRoomList = styled.div``;
+const StAlertMsg = styled.p`
+  color: white;
+  font-size: 50px;
+  width: auto;
+  margin: auto;
+`;
+
+const StRoomList = styled.div`
+  margin: 0 auto;
+`;
 
 const StRoomCard = styled.div`
   background-color: #42414b;
@@ -137,7 +148,7 @@ const StRoomCard = styled.div`
   height: 430px;
   border-radius: 4px;
   overflow: hidden;
-  margin: 10px 15px;
+  margin: 10px 20px;
   position: relative;
 `;
 
