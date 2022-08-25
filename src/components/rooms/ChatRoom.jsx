@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-//import io from "socket.io-client";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
 import MessageBox from "./MessageBox";
@@ -8,6 +7,7 @@ import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 //import jwt_decode from "jwt-decode";
+//import io from "socket.io-client";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -154,6 +154,8 @@ const ChatRoom = () => {
         .then(navigate("/"));
     }
   };
+
+  chatRoom();
 
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
