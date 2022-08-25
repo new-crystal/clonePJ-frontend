@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
 import { TextField } from "@material-ui/core";
 import styled from "styled-components";
 import MessageBox from "./MessageBox";
@@ -7,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { serverUrl } from "../../redux/modules";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+//import jwt_decode from "jwt-decode";
+//import io from "socket.io-client";
 
 const ChatRoom = () => {
   const navigate = useNavigate();
@@ -16,16 +17,80 @@ const ChatRoom = () => {
   const [chatData, setChatData] = useState("");
   const [roomData, setRoomData] = useState("");
   const [chats, setChats] = useState([]);
+  const [room, setRoom] = useState(true);
   const token = localStorage.getItem("token");
+  //const payload = jwt_decode(token);
 
-  //socket 연결
-  const socket = io.connect("http://localhost:3000", {
-    path: "/socket.io",
-  });
+  // //socket 연결1
+  // const socket = io.connect("http://localhost:3000", {
+  //   path: "/socket.io",
+  // });
+
+  // //socket연결2
+  // const socket = io.connect("http://localhost:3000", {
+  //   cors: {
+  //     origin: "http://localhost:3000",
+  //     credentials: true,
+  //   },
+  //   transports: ["websocket"],
+  //   query: {
+  //     token,
+  //   },
+  // });
+
+  // useEffect(() => {
+  //   socket.emit(
+  //     "join",
+  //     { name: payload.nickname, room: roomData.roomName },
+  //     (error) => {
+  //       if (error) {
+  //         alert(error);
+  //       }
+  //     }
+  //   );
+  // }, []);
+
+  // useEffect(() => {
+  //   socket.on("message", (chatData) => {
+  //     setChats((chatData) => [...chatData, chatData]);
+  //   });
+  // }, []);
+
+  // //user가 채팅방입장시
+  // useEffect(() => {
+  //   socket.on("chatData", (data) => {
+  //     console.log(data);
+  //     setChats(chatData);
+  //     socket.emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
+  //   });
+  // }, []);
+
+  // //user 채팅방 입장시
+  // useEffect(() => {
+  //   socket.on("join-msg", (msg) => {
+  //     alert(msg);
+  //     setContent(msg);
+  //   });
+  // }, [socket]);
+  // //퇴장시
+  // useEffect(() => {
+  //   return () => {
+  //     if (socket) {
+  //       socket.disconnect();
+  //     }
+  //   };
+  // }, [socket]);
+
+  // //토큰 없을시 로그인페이지로
+  // useEffect(() => {
+  //   if (token === null) {
+  //     return navigate("/login");
+  //   }
+  // }, []);
 
   //socket에 방 전체 기존 메시지 수신
   const chatRoom = async () => {
-    socket.emit("newChat", roomId);
+    //socket.emit("newChat", roomId);
     const response = await axios.get(`${serverUrl}/chat/${roomId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -37,17 +102,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     chatRoom();
-  }, [connected, chats]);
-
-  useEffect(() => {
-    socket.on("chatData", (chatData) => {
-      axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    });
-  }, [socket]);
+  }, [room, chats]);
 
   //input 값 content에 넣어주고 chatData에 content 넣기
   const onTextChangeHandler = (e) => {
@@ -58,43 +113,31 @@ const ChatRoom = () => {
   // 메시지 전송
   const onMessageSubmit = async (e) => {
     e.preventDefault();
-    if (content.trim() === "") {
-      return alert("채팅을 입력해주세요");
+    if (content !== null) {
+      //socket.emit("sendMessage", chatData);
+      await axios
+        .post(`${serverUrl}/chat/${roomId}`, chatData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(setRoom(!room))
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      await axios.post(`${serverUrl}/chat/${roomId}`, chatData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      alert("채팅을 입력해주세요");
       setConnected(!connected);
     }
-
     setContent("");
   };
-
-  //user가 채팅방입장시
-  socket.on("join-room", (roomName, done) => {
-    socket.join(roomName);
-    done();
-    socket
-      .to(roomName)
-      .emit("join-msg", `${socket["nickname"]}님께서 막 등장하셨습니다!`);
-  });
-
-  //user 채팅방 입장시
-  useEffect(() => {
-    socket.on("join-msg", (msg) => {
-      alert(msg);
-      //setContent(msg);
-    });
-  }, [socket]);
 
   //채팅방 나갈시 확인
   const onClickHomeBtnHandler = () => {
     const result = window.confirm("채팅방을 나가시겠습니까?");
     if (result) {
       navigate("/");
-      socket.on("disconnect");
+      //socket.on("disconnect");
     }
   };
 
@@ -112,44 +155,25 @@ const ChatRoom = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (socket) {
-        socket.disconnect();
-        socket = null;
-      }
-    };
-  }, []);
+  chatRoom();
 
   return (
     <Container onSubmit={(e) => onMessageSubmit(e)}>
       <div>
-        {roomData.roomName === undefined ? (
-          <>
-            <h1>삭제된 방입니다 !</h1>
-            <h1>홈으로 이동해주세요!</h1>
-            <button type="button" onClick={() => navigate("/")}>
-              HOME
-            </button>
-          </>
-        ) : (
-          <>
-            <h1># {roomData.roomName}</h1>
-            {roomData.owner ? (
-              <button type="button" onClick={() => onClickDelBtnHandler()}>
-                채팅방 삭제하기
-              </button>
-            ) : null}
-            <button type="button" onClick={() => onClickHomeBtnHandler()}>
-              채팅방 나가기
-            </button>
-          </>
-        )}
+        <h1># {roomData.roomName}</h1>
+        {roomData.owner ? (
+          <button type="button" onClick={() => onClickDelBtnHandler()}>
+            채팅방 삭제하기
+          </button>
+        ) : null}
+        <button type="button" onClick={() => onClickHomeBtnHandler()}>
+          채팅방 나가기
+        </button>
       </div>
       <p>🟢online {chats.nickname}</p>
       <Messages>
         {chats?.map((chat) => {
-          return <MessageBox key={chat.chatId} chat={chat} socket={socket} />;
+          return <MessageBox key={chat.chatId} chat={chat} />;
         })}
       </Messages>
       <TextField
@@ -164,7 +188,7 @@ const ChatRoom = () => {
 };
 
 const Container = styled.form`
-  max-width: 1200px;
+  max-width: 800px;
   max-height: 800px;
   width: 100vw;
   height: 100vh;

@@ -22,7 +22,6 @@ const CreateRoom = () => {
 
   const onChangeSelectHandler = (e0) => {
     setCategory(e0.target.value);
-    console.log(category);
   };
 
   const onChangeContentHandler = (e1) => {
@@ -134,7 +133,7 @@ const Wrap = styled.div`
     display: block;
     margin: 10px auto;
     padding-left: 10px;
-  } 
+  }
 
   .content {
     resize: none;
@@ -145,7 +144,6 @@ const Wrap = styled.div`
     display: block;
     margin: 10px auto;
     padding: 10px;
-    
   }
 
   button {
