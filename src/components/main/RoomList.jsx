@@ -62,7 +62,7 @@ return (
       <StRoomWrap>
         {
           rooms == "" ?
-          <p> 리스트가 없습니다 👽</p> :
+          <StAlertMsg> 리스트가 없습니다 👽</StAlertMsg> :
         [...rooms].map((room, roomId) => {
           return (
             <StRoomList key={roomId}>
@@ -131,18 +131,17 @@ const StRoomWrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: auto;
-  & p {
+`
+
+const StAlertMsg = styled.p`
     color: white;
     font-size: 50px;
     width: auto;
     margin: auto;
-  }
 `
 
 const StRoomList = styled.div`
   margin: 0 auto;
-  display: flex;
-
 `;
 
 const StRoomCard = styled.div`
