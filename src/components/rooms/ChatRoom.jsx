@@ -21,12 +21,12 @@ const ChatRoom = () => {
   const token = localStorage.getItem("token");
   //const payload = jwt_decode(token);
 
-  // //socket 연결
+  // //socket 연결1
   // const socket = io.connect("http://localhost:3000", {
   //   path: "/socket.io",
   // });
 
-  // //socket연결
+  // //socket연결2
   // const socket = io.connect("http://localhost:3000", {
   //   cors: {
   //     origin: "http://localhost:3000",
@@ -81,12 +81,12 @@ const ChatRoom = () => {
   //   };
   // }, [socket]);
 
-  //토큰 없을시 로그인으로
-  useEffect(() => {
-    if (token === null) {
-      return navigate("/login");
-    }
-  }, []);
+  // //토큰 없을시 로그인페이지로
+  // useEffect(() => {
+  //   if (token === null) {
+  //     return navigate("/login");
+  //   }
+  // }, []);
 
   //socket에 방 전체 기존 메시지 수신
   const chatRoom = async () => {

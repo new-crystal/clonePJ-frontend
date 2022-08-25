@@ -75,7 +75,7 @@ return (
                   {room.content}
                 </StRoomContent>
                 <StRoomBtn onClick={()=>{
-                  if (window.localStorage.getItem('token') !== undefined) {
+                  if (window.localStorage.getItem('token') !== null) {
                     navigate(`/room/${room.roomId}`, {replace: true})
                   } else {
                     Swal.fire(
